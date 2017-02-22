@@ -29,6 +29,8 @@ export class App extends Component {
     )
   }
 
+  // fetch('http://localhost:3000/users').then(data => console.log(data))
+
   render () {
     return (
       <div>
