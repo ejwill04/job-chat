@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
-import Login from '../components/login';
+import React, { Component } from 'react';
+// import Login from '../components/login';
+import { setActiveUser, setLoginErrorMessage } from '../actions';
 
 const mapStateToProps = (state) => {
-  console.log('a thing')
 };
 
 const mapDispatchToProps = (dispatch) => {
-  console.log('another thing')
 };
 
-export default connect(null, null)(Login);
+export default connect(null, null);

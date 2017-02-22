@@ -3,23 +3,25 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import rootReducer from './reducers';
-import ReactDOM from 'react-dom';
+import ReactDOM, { render } from 'react-dom';
 
-import './styles';
 import Header from './components/Header/Header';
-import AppContainer from './containers/AppContainer';
-import LoginContainer from './containers/LoginContainer';
+import App from './components/app';
+import Login from './components/login';
+import './styles';
 
 const devTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 
 const store = createStore(rootReducer, devTools);
 
 const router = (
-  <Router history={browserHistory}>
-    <Route path='/' component={AppContainer}>
-      <Route component={LoginContainer} path='/login' />
-    </Route>
-  </Router>
+  <Provider store={store}>
+    <Router history={browserHistory} >
+      <Route path='/' component={App} >
+        <Route path='/login' component={Login} />
+      </Route>
+    </Router>
+  </Provider>
 );
 
-ReactDOM.render(<Provider store={store} >{router}</Provider>, document.querySelector('.application'));
+render(router, document.getElementById('main'));
