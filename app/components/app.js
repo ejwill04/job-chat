@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import AppContainer from '../containers/AppContainer';
+import Login from './login';
 
 export class App extends Component {
 
