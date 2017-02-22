@@ -21,7 +21,8 @@ db.once('open', function() {
 
   //load models
   require('./models/user')(mongoose);
-  
+  require('./models/company')(mongoose);
+
   startExpress();
 });
 
@@ -36,6 +37,7 @@ function startExpress() {
 
   //load controllers
   require('./controllers/users')(app);
+  require('./controllers/companies')(app);
 
   //start express
   let server = app.listen(config.server.port, () => {

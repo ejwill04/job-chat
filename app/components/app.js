@@ -5,6 +5,17 @@ import Login from './login';
 
 export class App extends Component {
 
+  componentDidMount() {
+    fetch('http://localhost:3000/companies', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    }).then(response => response.json())
+    .then(payload => console.log(payload));
+  }
+
   toggleCityBtnPath() {
     return (
       <Link to='/cities'>
@@ -28,8 +39,6 @@ export class App extends Component {
       </Link>
     )
   }
-
-  // fetch('http://localhost:3000/users').then(data => console.log(data))
 
   render () {
     return (
