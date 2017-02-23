@@ -1,12 +1,17 @@
 import { connect } from 'react-redux';
-import React, { Component } from 'react';
+import { addCompanies } from '../actions';
+import App from '../components/app';
 
-const mapStateToProps = () => {
-
+const mapStateToProps = (state) => {
+  return { companies: state.companies };
 };
 
-const mapDispatchToProps = () => {
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addCompanies: (data) => {
+      dispatch(addCompanies(data));
+    }
+  };
 };
 
-export default connect(null, null);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

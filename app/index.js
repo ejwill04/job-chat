@@ -5,7 +5,7 @@ import { createStore } from 'redux';
 import rootReducer from './reducers';
 import ReactDOM, { render } from 'react-dom';
 
-import App from './components/app';
+import AppContainer from './containers/AppContainer';
 import Login from './components/login';
 import Cities from './components/cities';
 import Companies from './components/companies';
@@ -19,7 +19,7 @@ const store = createStore(rootReducer, devTools);
 const router = (
   <Provider store={store}>
     <Router history={browserHistory} >
-      <Route path='/' component={App} >
+      <Route path='/' component={AppContainer} >
       <Route path='/login' component={Login} />
       <Route path='/cities' component={Cities} />
       <Route path='/companies' component={Companies} />

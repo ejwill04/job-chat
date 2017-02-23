@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import AppContainer from '../containers/AppContainer';
 import Login from './login';
 
-export class App extends Component {
+export default class App extends Component {
 
   componentDidMount() {
     fetch('http://localhost:3000/companies', {
@@ -13,7 +12,7 @@ export class App extends Component {
       },
       method: 'GET',
     }).then(response => response.json())
-    .then(payload => console.log(payload));
+    .then(payload => this.props.addCompanies(payload));
   }
 
   toggleCityBtnPath() {
@@ -51,5 +50,3 @@ export class App extends Component {
     )
   }
 }
-
-export default AppContainer(App);

@@ -7,16 +7,16 @@ export class Cities extends React.Component {
 
 
   render() {
-      const cities = data.map(obj => {
-        return (
-          <div key={obj.response_id}>{obj.city}</div>
-        )
-      })
+      // const cities = data.map(obj => {
+      //   return (
+      //     <div key={obj.response_id}>{obj.city}</div>
+      //   )
+      // })
 
     return (
       <div>
         <h3>Cities page</h3>
-        {cities}
+        {/* {cities} */}
       </div>
     )
   }
