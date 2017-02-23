@@ -2,7 +2,14 @@ module.exports = (mongoose) => {
   var Schema = mongoose.Schema;
   var schema = Schema({
     city: String,
-    comments: String,
+    comments: [{
+      comment: String,
+      createdAt: Date,
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+      }
+    }],
     name: String,
     state: String
   });

@@ -36,6 +36,7 @@ function startExpress() {
   app.use(bodyParser.json({limit: '50mb'}));
 
   //load controllers
+  require('./config/routes')(app);
   require('./controllers/users')(app);
   require('./controllers/companies')(app);
 

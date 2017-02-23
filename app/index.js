@@ -9,7 +9,7 @@ import AppContainer from './containers/AppContainer';
 import Login from './components/login';
 import Cities from './components/cities';
 import Companies from './components/companies';
-import Company from './components/company';
+import CompanyContainer from './containers/CompanyContainer';
 import './styles';
 
 const devTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
@@ -23,7 +23,7 @@ const router = (
       <Route path='/login' component={Login} />
       <Route path='/cities' component={Cities} />
       <Route path='/companies' component={Companies} />
-      <Route path='/:company_name' component={Company} />
+      <Route path='/:name' component={CompanyContainer} />
       </Route>
     </Router>
   </Provider>

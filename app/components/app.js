@@ -5,10 +5,15 @@ import Login from './login';
 export default class App extends Component {
 
   componentDidMount() {
+    // call function here and get email and password
     fetch('http://localhost:3000/companies', {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': email + ":" + password
+        // I will need to store email and password in localStorage or cookies
+        // before every request, I will need to pass in the email and passwrod from localstorage
+        //could this be a helper method?
       },
       method: 'GET',
     }).then(response => response.json())
