@@ -1,22 +1,23 @@
 import React from 'react';
 import CitiesContainer from '../../containers/CitiesContainer';
 import { browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import data from '../../data';
 
 export class Cities extends React.Component {
-
-
   render() {
-      // const cities = data.map(obj => {
-      //   return (
-      //     <div key={obj.response_id}>{obj.city}</div>
-      //   )
-      // })
+      const cities = this.props.companies.map(obj => {
+        return (
+          <Link to={`/${obj.city}`} key={obj._id}>
+            <div>{obj.city}</div>
+          </Link>
+        )
+      })
 
     return (
       <div>
         <h3>Cities page</h3>
-        {/* {cities} */}
+        {cities}
       </div>
     )
   }
