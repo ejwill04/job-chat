@@ -12,7 +12,7 @@ export default class App extends Component {
       },
       method: 'GET',
     }).then(response => response.json())
-    .then(payload => this.props.addCompanies(payload));
+    .then(payload => this.props.addCompanies(payload.companies));
   }
 
   toggleCityBtnPath() {

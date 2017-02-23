@@ -18,18 +18,18 @@ export class Companies extends React.Component {
   // }
 
   render() {
-      // const companies = data.map(obj => {
-      //   return (
-      //     <Link to={`/${obj.company}`}>
-      //       <div key={obj.response_id}>{obj.company}</div>
-      //     </Link>
-      //   )
-      // })
+      const companies = this.props.companies.map(obj => {
+        return (
+          <Link to={`/${obj.name}`} key={obj._id}>
+            <div>{obj.name}</div>
+          </Link>
+        )
+      })
 
     return (
       <div>
         <h3>Companies page</h3>
-        {/* {companies} */}
+        {companies}
       </div>
     )
   }
