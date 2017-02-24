@@ -6,7 +6,7 @@ import rootReducer from './reducers';
 import ReactDOM, { render } from 'react-dom';
 
 import AppContainer from './containers/AppContainer';
-import Login from './components/login';
+import LoginContainer from './containers/LoginContainer';
 import Cities from './components/cities';
 import Companies from './components/companies';
 import CompanyContainer from './containers/CompanyContainer';
@@ -20,7 +20,7 @@ const router = (
   <Provider store={store}>
     <Router history={browserHistory} >
       <Route path='/' component={AppContainer} >
-      <Route path='/login' component={Login} />
+      <Route path='/login' component={LoginContainer} />
       <Route path='/cities' component={Cities} />
       <Route path='/companies' component={Companies} />
       <Route path='/:name' component={CompanyContainer} />

@@ -4,7 +4,8 @@ var User = mongoose.model('User');
 module.exports = (app) => {
   app.post('/signup', (req, res) => {
     var email = req.body.email;
-    var password = User.getPasswordHash(req.body.password);
+    // var password = User.getPasswordHash(req.body.password);
+    var password = req.body.password;
     var name = req.body.name;
 
     var user = {
@@ -24,15 +25,18 @@ module.exports = (app) => {
 
   app.post('/login', (req, res) => {
     var email = req.body.email;
-    var password = User.getPasswordHash(req.body.password);
+    // var password = User.getPasswordHash(req.body.password);
+    var password = req.body.password;
 
     User.findOne({
       email: email
     }, (err, user) => {
+
       if (err) console.error(err);
 
       res.json({
-        isValid: user && user.isValidPassword(password)
+        isValid: user
+        // isValid: user && user.isValidPassword(password)
       });
     });
   });
@@ -47,7 +51,8 @@ module.exports = (app) => {
     }, (err, user) => {
       if (err) console.error(err);
 
-      if (user && user.isValidPassword(password)) {
+      // if (user && user.isValidPassword(password)) {
+      if (user && password) {
         req.user = user;
         return next();
       } else {
