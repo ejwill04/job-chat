@@ -19,7 +19,7 @@ export class Company extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
     this.setState({ thisCompany: company });
     this.fetchAllUsers()
@@ -111,6 +111,25 @@ export class Company extends React.Component {
     })
   }
 
+  // updateComment(commentId) {
+  //   const companyId = this.state.thisCompany._id;
+  //   const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
+  //   const { email, password } = getStorage;
+  //   fetch(`http://localhost:3000/companies/${companyId}/comments/${commentId}`, {
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json',
+  //       'Authorization': email + ":" + password,
+  //     },
+  //     method: 'PUT',
+  //   })
+  //   .then(response => response.json()).then((data) => {
+  //     this.props.updateComment(data)
+  //     this.setState({ thisCompany: data.company })
+  //     this.fetchCompanies()
+  //   })
+  // }
+
   renderIconMenu(commentId) {
     return (
       <IconMenu
@@ -122,7 +141,10 @@ export class Company extends React.Component {
           primaryText="Delete"
           onClick={() => this.deleteComment(commentId)}
          />
-        <MenuItem primaryText="Update" />
+        {/* <MenuItem
+          primaryText="Update"
+          onClick={() => this.updateComment(commentId)}
+        /> */}
       </IconMenu>
     )
   }

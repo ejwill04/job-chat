@@ -27,9 +27,16 @@ export const addComment = (data) => {
 };
 
 export const deleteComment = (data) => {
-  console.log('deleteCommentAction', data)
+  // console.log('deleteCommentAction', data)
   return {
     type: 'DELETE_COMMENT',
+    data,
+  };
+};
+
+export const updateComment = (data) => {
+  return {
+    type: 'UPDATE_COMMENT',
     data,
   };
 };

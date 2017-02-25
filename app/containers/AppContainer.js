@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import { addCompanies, addComment, setActiveUser, setLoginErrorMessage, deleteComment } from '../actions';
+import { addCompanies, addComment, setActiveUser, setLoginErrorMessage, deleteComment, updateComment } from '../actions';
 
 const mapStateToProps = (state) => {
-  console.log('containers mapStateToProps', state)
+  // console.log('containers mapStateToProps', state)
   return { companies: state.companies, comment: state.comment, user: state.user, errorMessage: state.error };
 };
 
@@ -23,6 +23,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteComment: (data) => {
       dispatch(deleteComment(data));
+    },
+    updateComment: (data) => {
+      dispatch(updateComment(data));
     },
   };
 };

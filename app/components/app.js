@@ -15,7 +15,6 @@ export class App extends Component {
   }
 
   handleUpdateInput(searchText) {
-    console.log('this', this)
     this.setState({
       searchText: searchText,
     }, () => browserHistory.push(`/${this.state.searchText}`));
@@ -93,11 +92,11 @@ export class App extends Component {
           {localStorage.length > 0 ? this.toggleCompaniesBtnPath() : null}
           {localStorage.length > 0 ? this.toggleLogoutBtn() : null}
           <AutoComplete
-            hintText="Type 'r', case insensitive"
+            hintText="Search for a company"
             searchText={this.state.searchText}
             onUpdateInput={this.handleUpdateInput.bind(this)}
             dataSource={allCompanies}
-            filter={(searchText, key) => (key.indexOf(searchText) !== -1)}
+            filter={(searchText, key) => (key.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)}
             openOnFocus={true}
           />
           {this.props.children}
