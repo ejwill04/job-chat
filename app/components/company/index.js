@@ -1,23 +1,15 @@
 import React from 'react';
 import CompanyContainer from '../../containers/CompanyContainer';
 import { browserHistory } from 'react-router';
-// import { Link } from 'react-router';
 
 export class Company extends React.Component {
   constructor() {
     super();
     this.state = {
       commentInput: '',
+      comment: {},
     };
   }
-
-  // componentDidMount() {
-  //   if(localStorage) {
-  //     const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
-  //     const { name, password, email } = getStorage;
-  //     this.props.setActiveUser({name, password, email});
-  //   }
-  // }
 
   handleSubmit(e) {
     e.preventDefault();
@@ -31,16 +23,18 @@ export class Company extends React.Component {
       },
       method: 'POST',
       body: JSON.stringify({ comment: this.state.commentInput, user: _id })
-      // .then(payload => console.log(payload))
     })
     .then(response => response.json()).then((data) => {
+      console.log(data)
       this.props.addComment(data)
     })
     .catch((err)=> console.log('props', this.props))
   }
 
   render() {
+    console.log('props', this.props)
     const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
+    // this.setState({ comments: company.comments })
     const comments = company.comments ? company.comments.map(commentObj => <p key={commentObj._id}>{commentObj.comment}</p>) : null;
     return (
       <div>

@@ -1,4 +1,5 @@
 const company = (state=[], action) => {
+  console.log(action.data)
   switch (action.type) {
     case 'ADD_COMMENT':
       return action.data;

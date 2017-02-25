@@ -4,15 +4,6 @@ import { browserHistory } from 'react-router';
 
 export default class Login extends React.Component {
 
-  // componentDidMount() {
-  //   if (localStorage.length > 0) {
-  //     const storageObj = JSON.parse(localStorage.getItem('activeUserId'));
-  //     const { email, password, name } = storageObj;
-  //     this.props.setActiveUser({ name, password, email });
-  //     browserHistory.push('/');
-  //   }
-  // }
-
   handleSubmit(e) {
     const name = this.refs.name.value;
     const email = this.refs.email.value;
