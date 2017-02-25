@@ -1,13 +1,22 @@
 import React from 'react';
 import AppContainer from '../../containers/AppContainer';
 import { browserHistory } from 'react-router';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 export class Login extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      email: '',
+      name: '',
+      password: '',
+    };
+  }
 
   handleSubmit(e) {
-    const name = this.refs.name.value;
-    const email = this.refs.email.value;
-    const password = this.refs.password.value;
+    const { name, email, password } = this.state;
     e.preventDefault();
     if (email.length > 0 && password.length > 0 && this.validateEmail(email)) {
       this.userLogin(email, password, name);
@@ -19,9 +28,7 @@ export class Login extends React.Component {
   }
 
   createUser() {
-    const name = this.refs.name.value;
-    const email = this.refs.email.value;
-    const password = this.refs.password.value;
+    const { name, email, password } = this.state;
     if (this.validateEmail(email)) {
       fetch('http://localhost:3000/signup',
         {
@@ -90,34 +97,37 @@ export class Login extends React.Component {
         className='login-form'
         onSubmit={this.handleSubmit.bind(this)}
         >
-        <input
+        <TextField
           className='input-text'
           type='text'
-          placeholder='name'
           ref='name'
+          floatingLabelText="Name"
+          onChange={(e) => this.setState({ name: e.target.value })}
         />
-        <input
+        <TextField
           className='input-text'
           type='text'
-          placeholder='email'
           ref='email'
+          floatingLabelText="Email"
+          onChange={(e) => this.setState({ email: e.target.value })}
         />
-        <input
+        <TextField
           className='input-text'
           type='password'
-          placeholder='password'
           ref='password'
+          floatingLabelText="Password"
+          onChange={(e) => this.setState({ password: e.target.value })}
         />
         <div className='btn-container' >
-          <input
+          <RaisedButton
             className='btn btn-login'
             type='submit'
-            value='Login'
+            label='Login'
           />
-          <input
+          <RaisedButton
             className='btn btn-signup'
             type='button'
-            value='Sign Up'
+            label='Sign Up'
             onClick={this.createUser.bind(this)}
           />
         </div>
