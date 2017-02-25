@@ -4,6 +4,8 @@ import { browserHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import moment from 'moment';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
 
 export class Company extends React.Component {
   constructor() {
@@ -77,13 +79,24 @@ export class Company extends React.Component {
     .then(payload => this.setState({ users: payload.users }))
   }
 
+  renderUser(userId) {
+    if (this.state.users.length > 0) {
+      return (
+        <div>
+          {this.state.users.find(userObj => userObj._id === userId).name}
+        </div>
+      )
+    }
+  }
+
   render() {
     const company = this.state.thisCompany;
     const comments = company.comments ?
      company.comments.map(commentObj =>
        <div key={commentObj._id}>
-         <p className='company-comment'>{commentObj.comment}</p>
+         {this.renderUser(commentObj.user)}
          <div>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</div>
+         <p className='company-comment'>{commentObj.comment}</p>
        </div>
      ) : null;
 

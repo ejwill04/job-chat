@@ -84,13 +84,11 @@ export class App extends Component {
   }
 
   render () {
-    // const allCities = this.props.companies.map(obj => obj.city);
     const allCompanies = this.props.companies.map(obj => obj.name);
-    // const allCitiesAndCompanies = allCities.concat(allCompanies).sort();
     return (
       <MuiThemeProvider >
         <div className='app-header'>
-          <h1>Neumann's Assistant</h1>
+          <h1>Neumann</h1>
           {localStorage.length > 0 ? this.toggleCityBtnPath() : null}
           {localStorage.length > 0 ? this.toggleCompaniesBtnPath() : null}
           {localStorage.length > 0 ? this.toggleLogoutBtn() : null}
