@@ -1,8 +1,7 @@
 import React from 'react';
-import CompaniesContainer from '../../containers/CompaniesContainer';
+import AppContainer from '../../containers/AppContainer';
 import { browserHistory } from 'react-router';
 import { Link } from 'react-router';
-import data from '../../data';
 
 export class Companies extends React.Component {
   render() {
@@ -15,7 +14,7 @@ export class Companies extends React.Component {
       })
 
     return (
-      <div>
+      <div className='app-body'>
         <h3>Companies page</h3>
         {companies}
       </div>
@@ -23,4 +22,4 @@ export class Companies extends React.Component {
   }
 }
 
-export default CompaniesContainer(Companies);
+export default AppContainer(Companies);

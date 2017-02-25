@@ -1,8 +1,8 @@
 import React from 'react';
-// import LoginContainer from '../../containers/LoginContainer';
+import AppContainer from '../../containers/AppContainer';
 import { browserHistory } from 'react-router';
 
-export default class Login extends React.Component {
+export class Login extends React.Component {
 
   handleSubmit(e) {
     const name = this.refs.name.value;
@@ -126,3 +126,5 @@ export default class Login extends React.Component {
     );
   };
 };
+
+export default AppContainer(Login);

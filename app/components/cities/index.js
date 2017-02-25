@@ -1,5 +1,5 @@
 import React from 'react';
-import CitiesContainer from '../../containers/CitiesContainer';
+import AppContainer from '../../containers/AppContainer';
 import { browserHistory } from 'react-router';
 import { Link } from 'react-router';
 import data from '../../data';
@@ -23,4 +23,4 @@ export class Cities extends React.Component {
   }
 }
 
-export default CitiesContainer(Cities);
+export default AppContainer(Cities);

@@ -1,9 +1,37 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-// import Login from './login';
+import AppContainer from '../containers/AppContainer';
 import { browserHistory } from 'react-router';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
+import AutoComplete from 'material-ui/AutoComplete';
 
-export default class App extends Component {
+const colors = [
+  'Red',
+  'Orange',
+  'Yellow',
+  'Green',
+  'Blue',
+  'Purple',
+  'Black',
+  'White',
+];
+
+
+export class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      searchText: '',
+    };
+  }
+
+  handleUpdateInput(searchText) {
+    console.log('this', this)
+    this.setState({
+      searchText: searchText,
+    }, () => browserHistory.push(`/${this.state.searchText}`));
+  };
 
   componentWillMount() {
     if (localStorage.length === 0) {
@@ -30,10 +58,10 @@ export default class App extends Component {
   toggleCityBtnPath() {
     return (
       <Link to='/cities'>
-        <input
+        <RaisedButton
           className='btn'
           type='submit'
-          value='Cities'
+          label='Cities'
         />
       </Link>
     )
@@ -42,10 +70,10 @@ export default class App extends Component {
   toggleCompaniesBtnPath() {
     return (
       <Link to='/companies'>
-        <input
+        <RaisedButton
           className='btn'
           type='submit'
-          value='Companies'
+          label='Companies'
         />
       </Link>
     )
@@ -53,10 +81,10 @@ export default class App extends Component {
 
   toggleLogoutBtn() {
     return (
-      <input
+      <RaisedButton
         className='btn logout-btn'
         type='submit'
-        value='Logout'
+        label='Logout'
         onClick={() => this.clearLocalStorage()}
       />
     )
@@ -68,14 +96,30 @@ export default class App extends Component {
   }
 
   render () {
+    // const allCities = this.props.companies.map(obj => obj.city);
+    const allCompanies = this.props.companies.map(obj => obj.name);
+    // const allCitiesAndCompanies = allCities.concat(allCompanies).sort();
     return (
-      <div>
-        <h1>Neumann's Assistant</h1>
-        {localStorage.length > 0 ? this.toggleCityBtnPath() : null}
-        {localStorage.length > 0 ? this.toggleCompaniesBtnPath() : null}
-        {localStorage.length > 0 ? this.toggleLogoutBtn() : null}
-        {this.props.children}
-      </div>
+      <MuiThemeProvider >
+        <div className='app-header'>
+          <h1>Neumann's Assistant</h1>
+          {localStorage.length > 0 ? this.toggleCityBtnPath() : null}
+          {localStorage.length > 0 ? this.toggleCompaniesBtnPath() : null}
+          {localStorage.length > 0 ? this.toggleLogoutBtn() : null}
+          <AutoComplete
+            hintText="Type 'r', case insensitive"
+            searchText={this.state.searchText}
+            onUpdateInput={this.handleUpdateInput.bind(this)}
+            dataSource={allCompanies}
+            filter={(searchText, key) => (key.indexOf(searchText) !== -1)}
+            openOnFocus={true}
+          />
+          {this.props.children}
+        </div>
+      </MuiThemeProvider>
+
     )
   }
 }
+
+export default AppContainer(App);

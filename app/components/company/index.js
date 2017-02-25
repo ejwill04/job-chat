@@ -1,5 +1,5 @@
 import React from 'react';
-import CompanyContainer from '../../containers/CompanyContainer';
+import AppContainer from '../../containers/AppContainer';
 import { browserHistory } from 'react-router';
 
 export class Company extends React.Component {
@@ -7,8 +7,14 @@ export class Company extends React.Component {
     super();
     this.state = {
       commentInput: '',
-      comment: {},
+      thisCompany: '',
     };
+  }
+
+  componentDidMount() {
+    const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
+    console.log('company', company)
+    this.setState({ thisCompany: company });
   }
 
   handleSubmit(e) {
@@ -25,19 +31,19 @@ export class Company extends React.Component {
       body: JSON.stringify({ comment: this.state.commentInput, user: _id })
     })
     .then(response => response.json()).then((data) => {
-      console.log(data)
       this.props.addComment(data)
+      this.setState({ thisCompany: data.company })
     })
     .catch((err)=> console.log('props', this.props))
   }
 
   render() {
-    console.log('props', this.props)
-    const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
+    // console.log('props', this.props)
+    const company = this.state.thisCompany;
     // this.setState({ comments: company.comments })
     const comments = company.comments ? company.comments.map(commentObj => <p key={commentObj._id}>{commentObj.comment}</p>) : null;
     return (
-      <div>
+      <div className='app-body'>
         <h3>company: {company.name}</h3>
         <h4>location: {company.city}, {company.state}</h4>
         <p>comments:</p>
@@ -64,4 +70,4 @@ export class Company extends React.Component {
   }
 }
 
-export default CompanyContainer(Company);
+export default AppContainer(Company);

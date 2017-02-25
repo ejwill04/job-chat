@@ -1,5 +1,34 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+//variables
+$background: #fff;
+$header: #000;
+
 body {
-  background: lightBlue;
-  color: black;
+  background: $background;
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
+  text-align: center;
 }
+
+h1 {
+  color: $header;
+}
+
+.btn {
+  margin: 20px;
+}
+
+// .app-header {
+//   position: fixed;
+//   width: 100%;
+//   background: inherit;
+//   z-index: 10;
+// }
+//
+// .app-body {
+//   width: 100%;
+//   padding-top: 60px;
+//   overflow: auto;
+//   z-index: 5;
+// }
