@@ -1,6 +1,8 @@
 import React from 'react';
 import AppContainer from '../../containers/AppContainer';
 import { browserHistory } from 'react-router';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 export class Company extends React.Component {
   constructor() {
@@ -78,10 +80,10 @@ export class Company extends React.Component {
     const company = this.state.thisCompany;
     const comments = company.comments ?
      company.comments.map(commentObj =>
-       <div>
+       <div key={commentObj._id}>
          <p
            className='company-comment'
-           key={commentObj._id}>{commentObj.comment}
+           >{commentObj.comment}
          </p>
        </div>
      ) : null;
@@ -93,20 +95,20 @@ export class Company extends React.Component {
         <p>comments:</p>
         {comments}
         <form
-          className='login-form'
+          className='comment-form'
           onSubmit={this.handleSubmit.bind(this)}
           >
-          <input
+          <TextField
             className='input-comment'
             type='text'
-            placeholder='comment'
             ref='comment'
+            floatingLabelText="Comment"
             onChange={(e) => this.setState({ commentInput: e.target.value })}
           />
-          <input
+          <RaisedButton
             className='btn btn-comment'
             type='submit'
-            value='Comment'
+            label='Comment'
           />
         </form>
       </div>
