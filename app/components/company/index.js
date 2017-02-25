@@ -8,13 +8,14 @@ export class Company extends React.Component {
     this.state = {
       commentInput: '',
       thisCompany: '',
+      users: [],
     };
   }
 
   componentDidMount() {
     const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
-    console.log('company', company)
     this.setState({ thisCompany: company });
+    this.fetchAllUsers()
   }
 
   handleSubmit(e) {
@@ -33,15 +34,58 @@ export class Company extends React.Component {
     .then(response => response.json()).then((data) => {
       this.props.addComment(data)
       this.setState({ thisCompany: data.company })
+      this.fetchCompanies()
+      this.clearCommentInput()
     })
     .catch((err)=> console.log('props', this.props))
   }
 
+  clearCommentInput() {
+    document.querySelector('.input-comment').value = '';
+  }
+
+  fetchCompanies() {
+    if (localStorage.length > 0) {
+      const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
+      const { email, password } = getStorage;
+      fetch('http://localhost:3000/companies', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': email + ":" + password,
+        },
+        method: 'GET',
+      }).then(response => response.json())
+      .then(payload => this.props.addCompanies(payload.companies));
+    }
+  }
+
+  fetchAllUsers() {
+    const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
+    const { email, password } = getStorage;
+    fetch('http://localhost:3000/users', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': email + ":" + password,
+      },
+      method: 'GET',
+    }).then(response => response.json())
+    .then(payload => this.setState({ users: payload.users }))
+  }
+
   render() {
-    // console.log('props', this.props)
     const company = this.state.thisCompany;
-    // this.setState({ comments: company.comments })
-    const comments = company.comments ? company.comments.map(commentObj => <p key={commentObj._id}>{commentObj.comment}</p>) : null;
+    const comments = company.comments ?
+     company.comments.map(commentObj =>
+       <div>
+         <p
+           className='company-comment'
+           key={commentObj._id}>{commentObj.comment}
+         </p>
+       </div>
+     ) : null;
+
     return (
       <div className='app-body'>
         <h3>company: {company.name}</h3>
