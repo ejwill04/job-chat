@@ -91,23 +91,25 @@ export class Company extends React.Component {
     }
   }
 
-  deleteComment(commentId) {
+  deleteComment(commentId, commentUserId) {
     const companyId = this.state.thisCompany._id;
     const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
     const { email, password } = getStorage;
-    fetch(`http://localhost:3000/companies/${companyId}/comments/${commentId}`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': email + ":" + password,
-      },
-      method: 'DELETE',
-    })
-    .then(response => response.json()).then((data) => {
-      this.props.deleteComment(data)
-      this.setState({ thisCompany: data.company })
-      this.fetchCompanies()
-    })
+    if(getStorage._id === commentUserId) {
+      fetch(`http://localhost:3000/companies/${companyId}/comments/${commentId}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': email + ":" + password,
+        },
+        method: 'DELETE',
+      })
+      .then(response => response.json()).then((data) => {
+        this.props.deleteComment(data)
+        this.setState({ thisCompany: data.company })
+        this.fetchCompanies()
+      })
+    }
   }
 
   // updateComment(commentId) {
@@ -129,7 +131,7 @@ export class Company extends React.Component {
   //   })
   // }
 
-  renderIconMenu(commentId) {
+  renderIconMenu(commentId, commentUserId) {
     return (
       <IconMenu
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
@@ -138,7 +140,7 @@ export class Company extends React.Component {
       >
         <MenuItem
           primaryText="Delete"
-          onClick={() => this.deleteComment(commentId)}
+          onClick={() => this.deleteComment(commentId, commentUserId)}
          />
         {/* <MenuItem
           primaryText="Update"
@@ -155,7 +157,7 @@ export class Company extends React.Component {
        <div key={commentObj._id}>
          {this.renderUser(commentObj.user)}
          <span className='comment-submit-date'>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</span>
-         {this.renderIconMenu(commentObj._id)}
+         {this.renderIconMenu(commentObj._id, commentObj.user)}
          <p className='company-comment'>{commentObj.comment}</p>
        </div>
      ) : null;
