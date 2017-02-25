@@ -1,17 +1,17 @@
 import { connect } from 'react-redux';
-import { addCompanies } from '../actions';
+import { addCompanies, addComment } from '../actions';
 import Company from '../components/company';
 
 const mapStateToProps = (state) => {
-  return { companies: state.companies };
+  return { companies: state.companies, comment: state.comment };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addCompanies: (data) => {
-      dispatch(addMovies(data));
+    addComment: (data) => {
+      dispatch(addComment(data));
     }
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Company);
+export default connect(mapStateToProps, mapDispatchToProps);

@@ -18,3 +18,10 @@ export const setLoginErrorMessage = (data) => {
     data,
   };
 };
+
+export const addComment = (data) => {
+  return {
+    type: 'ADD_COMMENT',
+    data,
+  };
+};

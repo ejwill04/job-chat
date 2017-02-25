@@ -3,7 +3,9 @@ module.exports = (mongoose) => {
 
   var Schema = mongoose.Schema;
   var schema = Schema({
-    email: String,
+    email: { type: String,
+      index: true,
+      unique: true },
     name: String,
     password: String
   });

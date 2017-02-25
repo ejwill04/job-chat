@@ -9,6 +9,7 @@ import AppContainer from './containers/AppContainer';
 import LoginContainer from './containers/LoginContainer';
 import Cities from './components/cities';
 import Companies from './components/companies';
+import Company from './components/company';
 import CompanyContainer from './containers/CompanyContainer';
 import './styles';
 
@@ -20,10 +21,10 @@ const router = (
   <Provider store={store}>
     <Router history={browserHistory} >
       <Route path='/' component={AppContainer} >
-      <Route path='/login' component={LoginContainer} />
-      <Route path='/cities' component={Cities} />
-      <Route path='/companies' component={Companies} />
-      <Route path='/:name' component={CompanyContainer} />
+        <Route path='/login' component={LoginContainer} />
+        <Route path='/cities' component={Cities} />
+        <Route path='/companies' component={Companies} />
+        <Route path='/:name' component={Company} />
       </Route>
     </Router>
   </Provider>

@@ -4,6 +4,15 @@ import { browserHistory } from 'react-router';
 
 export default class Login extends React.Component {
 
+  // componentDidMount() {
+  //   if (localStorage.length > 0) {
+  //     const storageObj = JSON.parse(localStorage.getItem('activeUserId'));
+  //     const { email, password, name } = storageObj;
+  //     this.props.setActiveUser({ name, password, email });
+  //     browserHistory.push('/');
+  //   }
+  // }
+
   handleSubmit(e) {
     const name = this.refs.name.value;
     const email = this.refs.email.value;
@@ -13,7 +22,6 @@ export default class Login extends React.Component {
       this.userLogin(email, password, name);
       this.refs.email.value = '';
       this.refs.password.value = '';
-      this.refs.name.value = '';
     } else {
       this.refs.email.focus();
     }
@@ -34,9 +42,9 @@ export default class Login extends React.Component {
           body: JSON.stringify({ name: name, email: email, password: password }),
         }).then(response => response.json())
         .then(payload => {
-          const { email, password, name } = payload.user;
+          const { email, password, name, _id } = payload.user;
           this.addNewUserToStore(email, password, name);
-          localStorage.setItem('activeUserId', JSON.stringify({ email, password, name }));
+          localStorage.setItem('activeUserId', JSON.stringify({ email, password, name, _id }));
         });
     }
   }
@@ -74,9 +82,9 @@ export default class Login extends React.Component {
     const jsonResponse = response.json().then(
       payload => {
         if(payload.isValid) {
-          let { name, password, email } = payload.isValid;
+          let { name, password, email, _id } = payload.isValid;
           this.props.setActiveUser({ name, password, email });
-          localStorage.setItem('activeUserId', JSON.stringify({ email, password, name }));
+          localStorage.setItem('activeUserId', JSON.stringify({ email, password, name, _id }));
           browserHistory.push('/');
         } else {
           this.props.setLoginErrorMessage('*Your email and password do not match*');

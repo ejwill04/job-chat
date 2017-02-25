@@ -13,20 +13,27 @@ module.exports = (app) => {
       name: name,
       password: password
     };
+    var exists;
+    User.findOne({email: user.email}, (err, user) => {
+      exists = user;
+    })
+    console.log(exists)
+    if(!exists){
+      User.create(user, (err, user) => {
+        if (err) console.error(err);
 
-    User.create(user, (err, user) => {
-      if (err) console.error(err);
-
-      res.json({
-        user: user
-      });
-    });
+        res.json({
+          user: user
+        });
+      })
+    };
   });
 
   app.post('/login', (req, res) => {
     var email = req.body.email;
     // var password = User.getPasswordHash(req.body.password);
     var password = req.body.password;
+
 
     User.findOne({
       email: email
