@@ -82,23 +82,30 @@ export class App extends Component {
     browserHistory.push('/login');
   }
 
+  toggleSearchField(allCompanies) {
+    return (
+      <AutoComplete
+        hintText="Search for a company"
+        searchText={this.state.searchText}
+        onUpdateInput={this.handleUpdateInput.bind(this)}
+        dataSource={allCompanies}
+        filter={(searchText, key) => (key.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)}
+        openOnFocus={true}
+      />
+    )
+  }
+
   render () {
     const allCompanies = this.props.companies.map(obj => obj.name);
     return (
       <MuiThemeProvider >
         <div className='app-header'>
           <h1>Neumann</h1>
-          {localStorage.length > 0 ? this.toggleCityBtnPath() : null}
+          {/* {localStorage.length > 0 ? this.toggleCityBtnPath() : null} */}
           {localStorage.length > 0 ? this.toggleCompaniesBtnPath() : null}
+          {localStorage.length > 0 ? this.toggleSearchField(allCompanies) : null}
           {localStorage.length > 0 ? this.toggleLogoutBtn() : null}
-          <AutoComplete
-            hintText="Search for a company"
-            searchText={this.state.searchText}
-            onUpdateInput={this.handleUpdateInput.bind(this)}
-            dataSource={allCompanies}
-            filter={(searchText, key) => (key.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)}
-            openOnFocus={true}
-          />
+          {window.location.pathname === '/' ? <p>begin by browsing or searching for companies</p> : null}
           {this.props.children}
         </div>
       </MuiThemeProvider>

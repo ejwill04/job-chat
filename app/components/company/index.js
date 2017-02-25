@@ -84,16 +84,15 @@ export class Company extends React.Component {
   renderUser(userId) {
     if (this.state.users.length > 0) {
       return (
-        <div>
+        <span className='comment-username'>
           {this.state.users.find(userObj => userObj._id === userId).name}
-        </div>
+        </span>
       )
     }
   }
 
   deleteComment(commentId) {
     const companyId = this.state.thisCompany._id;
-    console.log('companyid', companyId)
     const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
     const { email, password } = getStorage;
     fetch(`http://localhost:3000/companies/${companyId}/comments/${commentId}`, {
@@ -155,8 +154,8 @@ export class Company extends React.Component {
      company.comments.map(commentObj =>
        <div key={commentObj._id}>
          {this.renderUser(commentObj.user)}
+         <span className='comment-submit-date'>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</span>
          {this.renderIconMenu(commentObj._id)}
-         <div>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</div>
          <p className='company-comment'>{commentObj.comment}</p>
        </div>
      ) : null;

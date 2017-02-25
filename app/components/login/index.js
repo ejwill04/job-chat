@@ -23,13 +23,14 @@ export class Login extends React.Component {
       this.refs.email.value = '';
       this.refs.password.value = '';
     } else {
+      this.props.setLoginErrorMessage('*Please enter a valid email address and password*');
       this.refs.email.focus();
     }
   }
 
   createUser() {
     const { name, email, password } = this.state;
-    if (this.validateEmail(email)) {
+    if (name.length > 0 && email.length > 0 && password.length > 0 && this.validateEmail(email)) {
       fetch('http://localhost:3000/signup',
         {
           headers: {
@@ -43,8 +44,10 @@ export class Login extends React.Component {
           const { email, password, name, _id } = payload.user;
           this.addNewUserToStore(email, password, name);
           localStorage.setItem('activeUserId', JSON.stringify({ email, password, name, _id }));
-        });
+        })
+        .catch(()=> this.props.setLoginErrorMessage('*An account with this email address already exists*'));
     }
+    this.props.setLoginErrorMessage('*Please enter a valid name, email address and password*');
   }
 
   userLogin(email, password, name) {
@@ -69,7 +72,7 @@ export class Login extends React.Component {
   validateEmail(email) {
     let emailPattern = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
     if (!emailPattern.test(email)) {
-      this.props.setLoginErrorMessage('*Please enter a valid email address');
+      this.props.setLoginErrorMessage('*Please enter a valid email address*');
       return false;
     } else {
       return true;
