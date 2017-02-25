@@ -3,6 +3,7 @@ import AppContainer from '../../containers/AppContainer';
 import { browserHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import moment from 'moment';
 
 export class Company extends React.Component {
   constructor() {
@@ -81,10 +82,8 @@ export class Company extends React.Component {
     const comments = company.comments ?
      company.comments.map(commentObj =>
        <div key={commentObj._id}>
-         <p
-           className='company-comment'
-           >{commentObj.comment}
-         </p>
+         <p className='company-comment'>{commentObj.comment}</p>
+         <div>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</div>
        </div>
      ) : null;
 
