@@ -17,7 +17,6 @@ module.exports = (app) => {
     User.findOne({email: user.email}, (err, user) => {
       exists = user;
     })
-    console.log(exists)
     if(!exists){
       User.create(user, (err, user) => {
         if (err) console.error(err);

@@ -25,3 +25,11 @@ export const addComment = (data) => {
     data,
   };
 };
+
+export const deleteComment = (data) => {
+  console.log('deleteCommentAction', data)
+  return {
+    type: 'DELETE_COMMENT',
+    data,
+  };
+};

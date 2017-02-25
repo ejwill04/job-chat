@@ -6,6 +6,8 @@ import TextField from 'material-ui/TextField';
 import moment from 'moment';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import MenuItem from 'material-ui/MenuItem';
 
 export class Company extends React.Component {
   constructor() {
@@ -23,7 +25,7 @@ export class Company extends React.Component {
     this.fetchAllUsers()
   }
 
-  handleSubmit(e) {
+  handleSubmitComment(e) {
     e.preventDefault();
     const companyId = this.props.companies.filter(obj => obj.name === this.props.params.name)[0]._id;
     const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
@@ -46,7 +48,7 @@ export class Company extends React.Component {
   }
 
   clearCommentInput() {
-    document.querySelector('.input-comment').value = '';
+    this.setState({ commentInput: '' })
   }
 
   fetchCompanies() {
@@ -89,12 +91,49 @@ export class Company extends React.Component {
     }
   }
 
+  deleteComment(commentId) {
+    const companyId = this.state.thisCompany._id;
+    console.log('companyid', companyId)
+    const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
+    const { email, password } = getStorage;
+    fetch(`http://localhost:3000/companies/${companyId}/comments/${commentId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': email + ":" + password,
+      },
+      method: 'DELETE',
+    })
+    .then(response => response.json()).then((data) => {
+      this.props.deleteComment(data)
+      this.setState({ thisCompany: data.company })
+      this.fetchCompanies()
+    })
+  }
+
+  renderIconMenu(commentId) {
+    return (
+      <IconMenu
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+      >
+        <MenuItem
+          primaryText="Delete"
+          onClick={() => this.deleteComment(commentId)}
+         />
+        <MenuItem primaryText="Update" />
+      </IconMenu>
+    )
+  }
+
   render() {
     const company = this.state.thisCompany;
     const comments = company.comments ?
      company.comments.map(commentObj =>
        <div key={commentObj._id}>
          {this.renderUser(commentObj.user)}
+         {this.renderIconMenu(commentObj._id)}
          <div>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</div>
          <p className='company-comment'>{commentObj.comment}</p>
        </div>
@@ -108,14 +147,16 @@ export class Company extends React.Component {
         {comments}
         <form
           className='comment-form'
-          onSubmit={this.handleSubmit.bind(this)}
+          onSubmit={this.handleSubmitComment.bind(this)}
           >
           <TextField
             className='input-comment'
             type='text'
             ref='comment'
             floatingLabelText="Comment"
-            onChange={(e) => this.setState({ commentInput: e.target.value })}
+            value={ this.state.commentInput }
+            onChange={(e) => this.setState({ commentInput: e.target.value }) }
+            // onNewRequest={(e) => this.setState({ commentInput: '' })}
           />
           <RaisedButton
             className='btn btn-comment'
