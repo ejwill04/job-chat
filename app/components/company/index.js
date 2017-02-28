@@ -182,7 +182,6 @@ export class Company extends React.Component {
             floatingLabelText="Comment"
             value={ this.state.commentInput }
             onChange={(e) => this.setState({ commentInput: e.target.value }) }
-            // onNewRequest={(e) => this.setState({ commentInput: '' })}
           />
           <RaisedButton
             className='btn btn-comment'

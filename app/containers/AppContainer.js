@@ -7,7 +7,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  console.log('mapDispatchToProps', dispatch)
+  // console.log('mapDispatchToProps', dispatch)
   return {
     addCompanies: (data) => {
       dispatch(addCompanies(data));
