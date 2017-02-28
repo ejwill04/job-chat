@@ -20,9 +20,8 @@ export class Company extends React.Component {
   }
 
   componentWillMount() {
-    const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
-    this.setState({ thisCompany: company });
     this.fetchAllUsers()
+    this.fetchCompanies()
   }
 
   handleSubmitComment(e) {
@@ -63,7 +62,11 @@ export class Company extends React.Component {
         },
         method: 'GET',
       }).then(response => response.json())
-      .then(payload => this.props.addCompanies(payload.companies));
+      .then(payload => this.props.addCompanies(payload.companies))
+      .then(() => {
+        const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
+        this.setState({ thisCompany: company });
+      })
     }
   }
 
