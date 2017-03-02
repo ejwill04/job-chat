@@ -26,7 +26,7 @@ To Start Server:
 
 To Visit App:
 
-mongo: `localhost:3000/ideas`  
+mongo: `localhost:8080`  
 mongoDB: './mongod' from your mongoDB folder (ex. ~/Desktop/mongodb-osx-x86_64-3.4.2/bin)
 
 ## Reflection
