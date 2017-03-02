@@ -1,6 +1,7 @@
 import React from 'react';
 import AppContainer from '../../containers/AppContainer';
 import RaisedButton from 'material-ui/RaisedButton';
+import { getLocalStorage } from '../helperFunctions';
 import TextField from 'material-ui/TextField';
 import moment from 'moment';
 import IconMenu from 'material-ui/IconMenu';
@@ -27,8 +28,7 @@ export class Company extends React.Component {
   handleSubmitComment(e) {
     e.preventDefault();
     const companyId = this.props.companies.filter(obj => obj.name === this.props.params.name)[0]._id;
-    const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
-    const { email, password, _id } = getStorage;
+    const { email, password, _id } = getLocalStorage();
     fetch(`http://localhost:3000/companies/${companyId}/comments`, {
       headers: {
         'Content-Type': 'application/json',
@@ -52,8 +52,7 @@ export class Company extends React.Component {
 
   fetchCompanies() {
     if (localStorage.length > 0) {
-      const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
-      const { email, password } = getStorage;
+      const { email, password } = getLocalStorage();
       fetch('http://localhost:3000/companies', {
         headers: {
           'Accept': 'application/json',
@@ -71,8 +70,7 @@ export class Company extends React.Component {
   }
 
   fetchAllUsers() {
-    const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
-    const { email, password } = getStorage;
+    const { email, password } = getLocalStorage();
     fetch('http://localhost:3000/users', {
       headers: {
         'Accept': 'application/json',
@@ -96,9 +94,8 @@ export class Company extends React.Component {
 
   deleteComment(commentId, commentUserId) {
     const companyId = this.state.thisCompany._id;
-    const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
-    const { email, password } = getStorage;
-    if (getStorage._id === commentUserId) {
+    const { email, password, _id } = getLocalStorage();
+    if (_id === commentUserId) {
       fetch(`http://localhost:3000/companies/${companyId}/comments/${commentId}`, {
         headers: {
           'Accept': 'application/json',

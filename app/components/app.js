@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import AppContainer from '../containers/AppContainer';
+import { getLocalStorage, clearLocalStorage, localStorageEmpty } from './helperFunctions';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import AutoComplete from 'material-ui/AutoComplete';
@@ -21,15 +22,14 @@ export class App extends Component {
   };
 
   componentWillMount() {
-    if (localStorage.length === 0) {
+    if (localStorageEmpty()) {
       browserHistory.push('/login');
     }
   }
 
   componentDidMount() {
     if (localStorage.length > 0) {
-      const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
-      const { email, password } = getStorage;
+      const { email, password } = getLocalStorage();
       fetch('http://localhost:3000/companies', {
         headers: {
           'Accept': 'application/json',
@@ -40,18 +40,6 @@ export class App extends Component {
       }).then(response => response.json())
       .then(payload => this.props.addCompanies(payload.companies));
     }
-  }
-
-  toggleCityBtnPath() {
-    return (
-      <Link to='/cities'>
-        <RaisedButton
-          className='btn'
-          type='submit'
-          label='Cities'
-        />
-      </Link>
-    );
   }
 
   toggleCompaniesBtnPath() {
@@ -72,14 +60,9 @@ export class App extends Component {
         className='btn logout-btn'
         type='submit'
         label='Logout'
-        onClick={() => this.clearLocalStorage()}
+        onClick={() => clearLocalStorage()}
       />
     );
-  }
-
-  clearLocalStorage() {
-    localStorage.clear();
-    browserHistory.push('/login');
   }
 
   toggleSearchField(allCompanies) {

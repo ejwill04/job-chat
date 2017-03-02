@@ -1,8 +1,8 @@
-import * as actions from '../../app/actions/index'
+/* eslint no-undef: 0 */
+import * as actions from '../../app/actions/index';
 
 describe('actions', () => {
   it('should create an action ADD_COMPANIES', () => {
-
     const data = { value: ['hello', 'world'] };
     const action = {
       type: 'ADD_COMPANIES',
@@ -10,10 +10,9 @@ describe('actions', () => {
     };
 
     expect(actions.addCompanies(data)).toEqual(action);
-  })
+  });
 
   it('should create an action SET_ACTIVE_USER', () => {
-
     const data = { user: ['hello', 'world'] };
     const action = {
       type: 'SET_ACTIVE_USER',
@@ -21,10 +20,9 @@ describe('actions', () => {
     };
 
     expect(actions.setActiveUser(data)).toEqual(action);
-  })
+  });
 
   it('should create an action SET_LOGIN_ERROR_MESSAGE', () => {
-
     const data = { user: ['hello', 'world'] };
     const action = {
       type: 'SET_LOGIN_ERROR_MESSAGE',
@@ -32,10 +30,9 @@ describe('actions', () => {
     };
 
     expect(actions.setLoginErrorMessage(data)).toEqual(action);
-  })
+  });
 
   it('should create an action ADD_COMMENT', () => {
-
     const data = { user: ['hello', 'world'] };
     const action = {
       type: 'ADD_COMMENT',
@@ -43,10 +40,9 @@ describe('actions', () => {
     };
 
     expect(actions.addComment(data)).toEqual(action);
-  })
+  });
 
   it('should create an action DELETE_COMMENT', () => {
-
     const data = { user: ['hello', 'world'] };
     const action = {
       type: 'DELETE_COMMENT',
@@ -54,10 +50,9 @@ describe('actions', () => {
     };
 
     expect(actions.deleteComment(data)).toEqual(action);
-  })
+  });
 
   it('should create an action UPDATE_COMMENT', () => {
-
     const data = { user: ['hello', 'world'] };
     const action = {
       type: 'UPDATE_COMMENT',
@@ -65,5 +60,5 @@ describe('actions', () => {
     };
 
     expect(actions.updateComment(data)).toEqual(action);
-  })
-})
+  });
+});
