@@ -1,6 +1,6 @@
 /* eslint no-undef: 0 */
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, render } from 'enzyme';
 
 import AppContainer from '../../app/containers/AppContainer';
 import App from '../../app/components/app';
@@ -14,7 +14,7 @@ const setup = () => {
     handleSubmit: jest.fn(),
   };
 
-  const wrapper = mount(
+  const wrapper = render(
     <Provider store={fakeStore}>
       <App {...props} />
     </Provider>

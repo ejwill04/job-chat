@@ -115,9 +115,10 @@ export class Company extends React.Component {
   renderIconMenu(commentId, commentUserId) {
     return (
       <IconMenu
+        className='icon-menu-btn'
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
         <MenuItem
           primaryText='Delete'
@@ -131,10 +132,10 @@ export class Company extends React.Component {
     const company = this.state.thisCompany;
     const comments = company.comments
     ? company.comments.map(commentObj =>
-      <div key={commentObj._id}>
+      <div key={commentObj._id} className='comment-box'>
         {this.renderUser(commentObj.user)}
         <span className='comment-submit-date'>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</span>
-        {this.renderIconMenu(commentObj._id, commentObj.user)}
+        <span className='icon-menu'>{this.renderIconMenu(commentObj._id, commentObj.user)}</span>
         <p className='company-comment'>{commentObj.comment}</p>
       </div>
      ) : null;
@@ -143,7 +144,7 @@ export class Company extends React.Component {
       <div className='app-body'>
         <h3>company: {company.name}</h3>
         <h4>location: {company.city}, {company.state}</h4>
-        <p>comments:</p>
+        <p className='comments-header'>what do you think about this company:</p>
         {comments}
         <form
           className='comment-form'

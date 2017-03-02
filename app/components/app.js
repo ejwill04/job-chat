@@ -87,7 +87,8 @@ export class App extends Component {
           {localStorage.length > 0 ? this.toggleCompaniesBtnPath() : null}
           {localStorage.length > 0 ? this.toggleSearchField(allCompanies) : null}
           {localStorage.length > 0 ? this.toggleLogoutBtn() : null}
-          {window.location.pathname === '/' ? <p>begin by browsing or searching for companies</p> : null}
+          {window.location.pathname === '/' ? <p className='tagline'>Neumann - the first employer Alan Turing said 'Fuck You' to</p> : null}
+          {window.location.pathname === '/' ? <p className='directional-text'>begin by browsing or searching for companies</p> : null}
           {this.props.children}
         </div>
       </MuiThemeProvider>
