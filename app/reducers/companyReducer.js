@@ -1,4 +1,4 @@
-const company = (state=[], action) => {
+const company = (state = [], action) => {
   // console.log('reducer state:',state, 'reducer action', action )
   switch (action.type) {
     case 'ADD_COMMENT':

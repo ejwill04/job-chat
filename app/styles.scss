@@ -3,6 +3,7 @@
 //variables
 $background: #fff;
 $header: #000;
+$header-background: #e8f8f9;
 
 body {
   background: $background;
@@ -53,18 +54,11 @@ h1 {
 
 .app-body {
   margin-bottom: 100px;
+  padding-top: 5px;
+  background-color: $background;
 }
 
-// .app-header {
-//   top: 0;
-//   width: 100%;
-//   z-index: 5;
-// }
-//
-// .app-body {
-//   position: relative;
-//   padding-top: 100px;
-//   width: 100%;
-//   overflow: auto;
-//   z-index: 1;
-// }
+.app-header {
+  padding-top: 1px;
+  background-color: $header-background;
+}

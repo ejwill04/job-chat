@@ -1,14 +1,13 @@
 import React from 'react';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import rootReducer from './reducers';
-import ReactDOM, { render } from 'react-dom';
-var injectTapEventPlugin = require("react-tap-event-plugin");
+import { render } from 'react-dom';
+var injectTapEventPlugin = require('react-tap-event-plugin');
 injectTapEventPlugin();
 
 import App from './components/app';
-import Cities from './components/cities';
 import Login from './components/login';
 import Companies from './components/companies';
 import Company from './components/company';
@@ -23,7 +22,6 @@ const router = (
     <Router history={browserHistory} >
       <Route path='/' component={App} >
         <Route path='/login' component={Login} />
-        <Route path='/cities' component={Cities} />
         <Route path='/companies' component={Companies} />
         <Route path='/:name' component={Company} />
       </Route>

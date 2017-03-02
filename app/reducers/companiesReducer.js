@@ -1,4 +1,4 @@
-const companies = (state=[], action) => {
+const companies = (state = [], action) => {
   switch (action.type) {
     case 'ADD_COMPANIES':
       return action.data;

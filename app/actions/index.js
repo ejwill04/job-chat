@@ -2,7 +2,7 @@ export const addCompanies = (data) => {
   return {
     type: 'ADD_COMPANIES',
     data,
-  }
+  };
 };
 
 export const setActiveUser = (data) => {

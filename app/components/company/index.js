@@ -1,6 +1,5 @@
 import React from 'react';
 import AppContainer from '../../containers/AppContainer';
-import { browserHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import moment from 'moment';
@@ -17,11 +16,12 @@ export class Company extends React.Component {
       thisCompany: '',
       users: [],
     };
+    this.handleSubmitComment = this.handleSubmitComment.bind(this);
   }
 
   componentWillMount() {
-    this.fetchAllUsers()
-    this.fetchCompanies()
+    this.fetchAllUsers();
+    this.fetchCompanies();
   }
 
   handleSubmitComment(e) {
@@ -32,22 +32,22 @@ export class Company extends React.Component {
     fetch(`http://localhost:3000/companies/${companyId}/comments`, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': email + ":" + password,
+        'Authorization': email + ':' + password,
       },
       method: 'POST',
-      body: JSON.stringify({ comment: this.state.commentInput, user: _id })
+      body: JSON.stringify({ comment: this.state.commentInput, user: _id }),
     })
     .then(response => response.json()).then((data) => {
-      this.props.addComment(data)
-      this.setState({ thisCompany: data.company })
-      this.fetchCompanies()
-      this.clearCommentInput()
+      this.props.addComment(data);
+      this.setState({ thisCompany: data.company });
+      this.fetchCompanies();
+      this.clearCommentInput();
     })
-    .catch((err)=> console.log('props', this.props))
+    .catch((err) => console.log('props', this.props, 'error', err));
   }
 
   clearCommentInput() {
-    this.setState({ commentInput: '' })
+    this.setState({ commentInput: '' });
   }
 
   fetchCompanies() {
@@ -58,7 +58,7 @@ export class Company extends React.Component {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': email + ":" + password,
+          'Authorization': email + ':' + password,
         },
         method: 'GET',
       }).then(response => response.json())
@@ -66,7 +66,7 @@ export class Company extends React.Component {
       .then(() => {
         const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
         this.setState({ thisCompany: company });
-      })
+      });
     }
   }
 
@@ -77,11 +77,11 @@ export class Company extends React.Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': email + ":" + password,
+        'Authorization': email + ':' + password,
       },
       method: 'GET',
     }).then(response => response.json())
-    .then(payload => this.setState({ users: payload.users }))
+    .then(payload => this.setState({ users: payload.users }));
   }
 
   renderUser(userId) {
@@ -90,7 +90,7 @@ export class Company extends React.Component {
         <span className='comment-username'>
           {this.state.users.find(userObj => userObj._id === userId).name}
         </span>
-      )
+      );
     }
   }
 
@@ -98,20 +98,20 @@ export class Company extends React.Component {
     const companyId = this.state.thisCompany._id;
     const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
     const { email, password } = getStorage;
-    if(getStorage._id === commentUserId) {
+    if (getStorage._id === commentUserId) {
       fetch(`http://localhost:3000/companies/${companyId}/comments/${commentId}`, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': email + ":" + password,
+          'Authorization': email + ':' + password,
         },
         method: 'DELETE',
       })
       .then(response => response.json()).then((data) => {
-        this.props.deleteComment(data)
-        this.setState({ thisCompany: data.company })
-        this.fetchCompanies()
-      })
+        this.props.deleteComment(data);
+        this.setState({ thisCompany: data.company });
+        this.fetchCompanies();
+      });
     }
   }
 
@@ -119,27 +119,27 @@ export class Company extends React.Component {
     return (
       <IconMenu
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
       >
         <MenuItem
-          primaryText="Delete"
+          primaryText='Delete'
           onClick={() => this.deleteComment(commentId, commentUserId)}
          />
       </IconMenu>
-    )
+    );
   }
 
   render() {
     const company = this.state.thisCompany;
-    const comments = company.comments ?
-     company.comments.map(commentObj =>
-       <div key={commentObj._id}>
-         {this.renderUser(commentObj.user)}
-         <span className='comment-submit-date'>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</span>
-         {this.renderIconMenu(commentObj._id, commentObj.user)}
-         <p className='company-comment'>{commentObj.comment}</p>
-       </div>
+    const comments = company.comments
+    ? company.comments.map(commentObj =>
+      <div key={commentObj._id}>
+        {this.renderUser(commentObj.user)}
+        <span className='comment-submit-date'>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</span>
+        {this.renderIconMenu(commentObj._id, commentObj.user)}
+        <p className='company-comment'>{commentObj.comment}</p>
+      </div>
      ) : null;
 
     return (
@@ -150,15 +150,15 @@ export class Company extends React.Component {
         {comments}
         <form
           className='comment-form'
-          onSubmit={this.handleSubmitComment.bind(this)}
+          onSubmit={this.handleSubmitComment}
           >
           <TextField
             className='input-comment'
             type='text'
             ref='comment'
-            floatingLabelText="Comment"
-            value={ this.state.commentInput }
-            onChange={(e) => this.setState({ commentInput: e.target.value }) }
+            floatingLabelText='Comment'
+            value={this.state.commentInput}
+            onChange={(e) => this.setState({ commentInput: e.target.value })}
           />
           <RaisedButton
             className='btn btn-comment'
@@ -167,8 +167,16 @@ export class Company extends React.Component {
           />
         </form>
       </div>
-    )
+    );
   }
 }
+
+Company.propTypes = {
+  companies: React.PropTypes.array,
+  params: React.PropTypes.object,
+  addComment: React.PropTypes.func,
+  addCompanies: React.PropTypes.func,
+  deleteComment: React.PropTypes.func,
+};
 
 export default AppContainer(Company);
