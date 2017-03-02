@@ -1,8 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Acme');
 
 //variables
 $background: #fff;
 $header: #000;
+$header-background: #e8f8f9;
+$line: #d3d3d3;
 
 body {
   background: $background;
@@ -12,7 +15,25 @@ body {
 }
 
 h1 {
+  margin: 10px auto;
   color: $header;
+  font-family: 'Acme', sans-serif;
+  font-size: 42px;
+  letter-spacing: 1.5px;
+}
+
+h3 {
+  font-size: 26px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+.comments-header {
+  padding-bottom: 5px;
+  border-bottom: 1px solid $line;
+  font-size: 16px;
 }
 
 .btn {
@@ -23,16 +44,80 @@ h1 {
   margin: 20px;
 }
 
-// .app-header {
-//   position: fixed;
-//   width: 100%;
-//   background: inherit;
-//   z-index: 10;
-// }
-//
-// .app-body {
-//   width: 100%;
-//   padding-top: 60px;
-//   overflow: auto;
-//   z-index: 5;
-// }
+.input-comment {
+  flex-grow: 2;
+}
+
+.comment-form {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding-bottom: 20px;
+  background-color: $header-background;
+  z-index: 5;
+}
+
+.comment-username {
+  margin: 30px 20px;
+  padding: 15px auto;
+  font-weight: bold;
+}
+
+.comment-submit-date {
+  margin: 30px 20px;
+  padding: 15px auto;
+  font-style: italic;
+}
+
+.icon-menu-btn {
+  margin-top: 5px;
+}
+
+.company-comment {
+  width: 80%;
+  margin: 10px auto;
+}
+
+.app-body {
+  margin-bottom: 100px;
+  padding-top: 5px;
+  background-color: $background;
+}
+
+.app-header {
+  padding-top: 1px;
+  background-color: $header-background;
+}
+
+.company-selector {
+  margin: 10px auto;
+  font-size: 16px;
+}
+
+.icon-menu {
+  position: absolute;
+  right: 0;
+}
+
+.comment-box {
+  position: relative;
+  width: 60%;
+  min-height: 60px;
+  margin: 5px auto;
+  padding: 10px;
+  border: 1px solid $line;
+  @media (max-width: 600px) {
+    width: 97%;
+  }
+}
+
+.tagline,
+.directional-text {
+  padding: 5px;
+  font-size: 16px;
+}
+
+.tagline {
+  font-style: italic;
+}

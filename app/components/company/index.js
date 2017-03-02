@@ -1,6 +1,13 @@
 import React from 'react';
 import AppContainer from '../../containers/AppContainer';
-import { browserHistory } from 'react-router';
+import RaisedButton from 'material-ui/RaisedButton';
+import { getLocalStorage } from '../helperFunctions';
+import TextField from 'material-ui/TextField';
+import moment from 'moment';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import MenuItem from 'material-ui/MenuItem';
 
 export class Company extends React.Component {
   constructor() {
@@ -10,108 +17,164 @@ export class Company extends React.Component {
       thisCompany: '',
       users: [],
     };
+    this.handleSubmitComment = this.handleSubmitComment.bind(this);
   }
 
-  componentDidMount() {
-    const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
-    this.setState({ thisCompany: company });
-    this.fetchAllUsers()
+  componentWillMount() {
+    this.fetchAllUsers();
+    this.fetchCompanies();
   }
 
-  handleSubmit(e) {
+  handleSubmitComment(e) {
     e.preventDefault();
     const companyId = this.props.companies.filter(obj => obj.name === this.props.params.name)[0]._id;
-    const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
-    const { email, password, _id } = getStorage;
+    const { email, password, _id } = getLocalStorage();
     fetch(`http://localhost:3000/companies/${companyId}/comments`, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': email + ":" + password,
+        'Authorization': email + ':' + password,
       },
       method: 'POST',
-      body: JSON.stringify({ comment: this.state.commentInput, user: _id })
+      body: JSON.stringify({ comment: this.state.commentInput, user: _id }),
     })
     .then(response => response.json()).then((data) => {
-      this.props.addComment(data)
-      this.setState({ thisCompany: data.company })
-      this.fetchCompanies()
-      this.clearCommentInput()
+      this.props.addComment(data);
+      this.setState({ thisCompany: data.company });
+      this.fetchCompanies();
+      this.clearCommentInput();
     })
-    .catch((err)=> console.log('props', this.props))
+    .catch((err) => console.log('props', this.props, 'error', err));
   }
 
   clearCommentInput() {
-    document.querySelector('.input-comment').value = '';
+    this.setState({ commentInput: '' });
   }
 
   fetchCompanies() {
     if (localStorage.length > 0) {
-      const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
-      const { email, password } = getStorage;
+      const { email, password } = getLocalStorage();
       fetch('http://localhost:3000/companies', {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': email + ":" + password,
+          'Authorization': email + ':' + password,
         },
         method: 'GET',
       }).then(response => response.json())
-      .then(payload => this.props.addCompanies(payload.companies));
+      .then(payload => this.props.addCompanies(payload.companies))
+      .then(() => {
+        const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
+        this.setState({ thisCompany: company });
+      });
     }
   }
 
   fetchAllUsers() {
-    const getStorage = JSON.parse(localStorage.getItem('activeUserId'));
-    const { email, password } = getStorage;
+    const { email, password } = getLocalStorage();
     fetch('http://localhost:3000/users', {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': email + ":" + password,
+        'Authorization': email + ':' + password,
       },
       method: 'GET',
     }).then(response => response.json())
-    .then(payload => this.setState({ users: payload.users }))
+    .then(payload => this.setState({ users: payload.users }));
+  }
+
+  renderUser(userId) {
+    if (this.state.users.length > 0) {
+      return (
+        <span className='comment-username'>
+          {this.state.users.find(userObj => userObj._id === userId).name}
+        </span>
+      );
+    }
+  }
+
+  deleteComment(commentId, commentUserId) {
+    const companyId = this.state.thisCompany._id;
+    const { email, password, _id } = getLocalStorage();
+    if (_id === commentUserId) {
+      fetch(`http://localhost:3000/companies/${companyId}/comments/${commentId}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': email + ':' + password,
+        },
+        method: 'DELETE',
+      })
+      .then(response => response.json()).then((data) => {
+        this.props.deleteComment(data);
+        this.setState({ thisCompany: data.company });
+        this.fetchCompanies();
+      });
+    }
+  }
+
+  renderIconMenu(commentId, commentUserId) {
+    return (
+      <IconMenu
+        className='icon-menu-btn'
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+      >
+        <MenuItem
+          primaryText='Delete'
+          onClick={() => this.deleteComment(commentId, commentUserId)}
+         />
+      </IconMenu>
+    );
   }
 
   render() {
     const company = this.state.thisCompany;
-    const comments = company.comments ?
-     company.comments.map(commentObj =>
-       <div>
-         <p
-           className='company-comment'
-           key={commentObj._id}>{commentObj.comment}
-         </p>
-       </div>
+    const comments = company.comments
+    ? company.comments.map(commentObj =>
+      <div key={commentObj._id} className='comment-box'>
+        {this.renderUser(commentObj.user)}
+        <span className='comment-submit-date'>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</span>
+        <span className='icon-menu'>{this.renderIconMenu(commentObj._id, commentObj.user)}</span>
+        <p className='company-comment'>{commentObj.comment}</p>
+      </div>
      ) : null;
 
     return (
       <div className='app-body'>
         <h3>company: {company.name}</h3>
         <h4>location: {company.city}, {company.state}</h4>
-        <p>comments:</p>
+        <p className='comments-header'>what do you think about this company:</p>
         {comments}
         <form
-          className='login-form'
-          onSubmit={this.handleSubmit.bind(this)}
+          className='comment-form'
+          onSubmit={this.handleSubmitComment}
           >
-          <input
+          <TextField
             className='input-comment'
             type='text'
-            placeholder='comment'
             ref='comment'
+            floatingLabelText='Comment'
+            value={this.state.commentInput}
             onChange={(e) => this.setState({ commentInput: e.target.value })}
           />
-          <input
+          <RaisedButton
             className='btn btn-comment'
             type='submit'
-            value='Comment'
+            label='Comment'
           />
         </form>
       </div>
-    )
+    );
   }
 }
+
+Company.propTypes = {
+  companies: React.PropTypes.array,
+  params: React.PropTypes.object,
+  addComment: React.PropTypes.func,
+  addCompanies: React.PropTypes.func,
+  deleteComment: React.PropTypes.func,
+};
 
 export default AppContainer(Company);

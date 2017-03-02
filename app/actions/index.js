@@ -2,7 +2,7 @@ export const addCompanies = (data) => {
   return {
     type: 'ADD_COMPANIES',
     data,
-  }
+  };
 };
 
 export const setActiveUser = (data) => {
@@ -22,6 +22,21 @@ export const setLoginErrorMessage = (data) => {
 export const addComment = (data) => {
   return {
     type: 'ADD_COMMENT',
+    data,
+  };
+};
+
+export const deleteComment = (data) => {
+  // console.log('deleteCommentAction', data)
+  return {
+    type: 'DELETE_COMMENT',
+    data,
+  };
+};
+
+export const updateComment = (data) => {
+  return {
+    type: 'UPDATE_COMMENT',
     data,
   };
 };

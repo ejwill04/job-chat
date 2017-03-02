@@ -2,13 +2,13 @@ require('babel-register')();
 
 // HELP MOCHA HANDLE CSS MODULES
 
-var hook = require('css-modules-require-hook')
-var sass = require('node-sass')
+var hook = require('css-modules-require-hook');
+var sass = require('node-sass');
 
 hook({
   extensions: [ '.scss', '.css' ],
   generateScopedName: '[local]___[hash:base64:5]',
-  preprocessCss: ( data, file ) => sass.renderSync({ file }).css
+  preprocessCss: (data, file) => sass.renderSync({ file }).css
 });
 
 // SETUP JSDOM BUSINESS
@@ -27,5 +27,5 @@ Object.keys(document.defaultView).forEach((property) => {
 });
 
 global.navigator = {
-  userAgent: 'node.js'
+  userAgent: 'node.js',
 };
