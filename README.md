@@ -5,9 +5,9 @@ An app for finding information about potential employers
 ## Project Status
 This project is currently an MVP.  Users can login, search for, and comment about potential companies.
 
-## Installation and Setup Instructions
+![Screenshot](http://imgur.com/TWcqNbK)
 
-#### Example:  
+## Installation and Setup Instructions
 
 Clone down this repository. You will need `node` and `npm` installed globally on your machine.  
 To run the server, you will need Mongo and MongoDB
