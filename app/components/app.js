@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import AppContainer from '../containers/AppContainer';
+import Companies from './companies';
 import { getLocalStorage, clearLocalStorage, localStorageEmpty } from './helperFunctions';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -27,7 +28,12 @@ export class App extends Component {
     }
   }
 
+  // componentWillReceiveProps() {
+  //
+  // }
+
   componentDidMount() {
+    console.log('it mounted')
     if (localStorage.length > 0) {
       const { email, password } = getLocalStorage();
       fetch('http://localhost:3000/companies', {
@@ -44,7 +50,7 @@ export class App extends Component {
 
   toggleCompaniesBtnPath() {
     return (
-      <Link to='/companies'>
+      <Link to='/'>
         <RaisedButton
           className='btn'
           type='submit'
@@ -84,11 +90,12 @@ export class App extends Component {
       <MuiThemeProvider >
         <div className='app-header'>
           <h1>Neumann</h1>
-          {localStorage.length > 0 ? this.toggleCompaniesBtnPath() : null}
+          {localStorage.length > 0  && window.location.pathname !== '/' ? this.toggleCompaniesBtnPath() : null}
           {localStorage.length > 0 ? this.toggleSearchField(allCompanies) : null}
           {localStorage.length > 0 ? this.toggleLogoutBtn() : null}
           {window.location.pathname === '/' ? <p className='tagline'>Neumann - the first employer Alan Turing said 'Fuck You' to</p> : null}
           {window.location.pathname === '/' ? <p className='directional-text'>begin by browsing or searching for companies</p> : null}
+          {window.location.pathname === '/' ? <Companies /> : null}
           {this.props.children}
         </div>
       </MuiThemeProvider>

@@ -4,13 +4,15 @@ import { Link, browserHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-export class Login extends React.Component {
+export class Signup extends React.Component {
   constructor() {
     super();
     this.state = {
       email: '',
+      name: '',
       password: '',
     };
+    this.createUser = this.createUser.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -27,6 +29,28 @@ export class Login extends React.Component {
     }
   }
 
+  createUser() {
+    const { name, email, password } = this.state;
+    if (name.length > 0 && email.length > 0 && password.length > 0 && this.validateEmail(email)) {
+      fetch('http://localhost:3000/signup',
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify({ name: name, email: email, password: password }),
+        }).then(response => response.json())
+        .then(payload => {
+          const { email, password, name, _id } = payload.user;
+          this.addNewUserToStore(email, password, name);
+          localStorage.setItem('activeUserId', JSON.stringify({ email, password, name, _id }));
+        })
+        .catch(() => this.props.setLoginErrorMessage('*An account with this email address already exists*'));
+    }
+    this.props.setLoginErrorMessage('*Please enter a valid name, email address and password*');
+  }
+
   userLogin(email, password, name) {
     fetch('http://localhost:3000/login',
       {
@@ -40,11 +64,11 @@ export class Login extends React.Component {
         this.validateUser(response));
   }
 
-  // addNewUserToStore(email, password, name) {
-  //   const userData = { name, password, email };
-  //   this.props.setActiveUser(userData);
-  //   browserHistory.push('/');
-  // }
+  addNewUserToStore(email, password, name) {
+    const userData = { name, password, email };
+    this.props.setActiveUser(userData);
+    browserHistory.push('/');
+  }
 
   validateEmail(email) {
     let emailPattern = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -80,6 +104,13 @@ export class Login extends React.Component {
         <TextField
           className='input-text'
           type='text'
+          ref='name'
+          floatingLabelText='Name'
+          onChange={(e) => this.setState({ name: e.target.value })}
+        />
+        <TextField
+          className='input-text'
+          type='text'
           ref='email'
           floatingLabelText='Email'
           onChange={(e) => this.setState({ email: e.target.value })}
@@ -93,15 +124,16 @@ export class Login extends React.Component {
         />
         <div className='btn-container' >
           <RaisedButton
-            className='btn btn-login'
-            type='submit'
-            label='Login'
+            className='btn btn-signup'
+            type='button'
+            label='Sign Up'
+            onClick={this.createUser}
           />
-          <Link to='/signup'>
+          <Link to='/login'>
             <RaisedButton
-              className='btn'
+              className='btn btn-login'
               type='submit'
-              label='Signup for an account'
+              label='Have an account? Signin'
             />
           </Link>
         </div>
@@ -111,7 +143,7 @@ export class Login extends React.Component {
   };
 };
 
-Login.propTypes = {
+Signup.propTypes = {
   companies: React.PropTypes.array,
   errorMessage: React.PropTypes.string,
   setLoginErrorMessage: React.PropTypes.func,
@@ -119,4 +151,4 @@ Login.propTypes = {
   deleteComment: React.PropTypes.func,
 };
 
-export default AppContainer(Login);
+export default AppContainer(Signup);

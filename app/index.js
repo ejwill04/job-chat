@@ -9,7 +9,8 @@ injectTapEventPlugin();
 
 import App from './components/app';
 import Login from './components/login';
-import Companies from './components/companies';
+import Signup from './components/signup';
+// import Companies from './components/companies';
 import Company from './components/company';
 import './styles';
 
@@ -22,7 +23,8 @@ const router = (
     <Router history={browserHistory} >
       <Route path='/' component={App} >
         <Route path='/login' component={Login} />
-        <Route path='/companies' component={Companies} />
+        <Route path='/signup' component={Signup} />
+        {/* <Route path='/companies' component={Companies} /> */}
         <Route path='/:name' component={Company} />
       </Route>
     </Router>
