@@ -14,13 +14,20 @@ export class App extends Component {
       searchText: '',
     };
     this.handleUpdateInput = this.handleUpdateInput.bind(this);
+    this.handleSubmittedSearch = this.handleSubmittedSearch.bind(this);
   }
 
   handleUpdateInput(searchText) {
-    this.setState({
-      searchText: searchText,
-    }, () => browserHistory.push(`/${this.state.searchText}`));
-  };
+    this.setState({ searchText: searchText });
+  }
+
+  handleSubmittedSearch() {
+    let CompanyObj = this.props.companies.filter(company => company.name.toLowerCase() === this.state.searchText.toLowerCase());
+    if (CompanyObj) {
+      browserHistory.push(`/${CompanyObj[0].name}`);
+      this.setState({ searchText: '' });
+    }
+  }
 
   componentWillMount() {
     if (localStorageEmpty()) {
@@ -77,6 +84,7 @@ export class App extends Component {
         hintText='Search for a company'
         searchText={this.state.searchText}
         onUpdateInput={this.handleUpdateInput}
+        onNewRequest={this.handleSubmittedSearch}
         dataSource={allCompanies}
         filter={(searchText, key) => (key.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)}
         openOnFocus
@@ -90,7 +98,7 @@ export class App extends Component {
       <MuiThemeProvider >
         <div className='app-header'>
           <h1>Neumann</h1>
-          {localStorage.length > 0  && window.location.pathname !== '/' ? this.toggleCompaniesBtnPath() : null}
+          {localStorage.length > 0 && window.location.pathname !== '/' ? this.toggleCompaniesBtnPath() : null}
           {localStorage.length > 0 ? this.toggleSearchField(allCompanies) : null}
           {localStorage.length > 0 ? this.toggleLogoutBtn() : null}
           {window.location.pathname === '/' ? <p className='tagline'>Neumann - the first employer Alan Turing said 'Fuck You' to</p> : null}
