@@ -24,7 +24,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 
 import AppContainer from '../../app/containers/AppContainer';
-import Companies from '../../app/components/companies';
+import { Companies } from '../../app/components/companies';
 import { Provider } from 'react-redux';
 
 import configureMockStore from 'redux-mock-store';
@@ -37,9 +37,7 @@ const setup = () => {
   };
 
   const wrapper = mount(
-    <Provider store={fakeStore}>
-      <Companies companies={[1, 2, 3]} />
-    </Provider>
+    <Companies companies={[{ _id: 'b', name: 'c' }]} />
   );
 
   const Component = wrapper.find(Companies);
@@ -68,17 +66,17 @@ describe('components', () => {
 
     it('should have props of companies with a length of three', () => {
       const { Component } = setup();
-      expect(Component.props().companies.length).toEqual(3);
+      expect(Component.props().companies.length).toEqual(1);
     });
 
     it('should have props of companies', () => {
       const { Component } = setup();
-      expect(Component.props().companies).toEqual([1, 2, 3]);
+      expect(Component.props().companies).toEqual([{ _id: 'b', name: 'c' }]);
     });
 
     it('should have props of companies', () => {
       const { Component } = setup();
-      expect(Component.props().companies).toEqual([1, 2, 3]);
+      expect(Component.props().companies).toEqual([{ _id: 'b', name: 'c' }]);
     });
 
     it.skip('Link should have props', () => {

@@ -64,6 +64,7 @@ export class Company extends React.Component {
       .then(payload => this.props.addCompanies(payload.companies))
       .then(() => {
         const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
+        console.log('props', this.props);
         this.setState({ thisCompany: company });
       });
     }
@@ -176,5 +177,4 @@ Company.propTypes = {
   addCompanies: React.PropTypes.func,
   deleteComment: React.PropTypes.func,
 };
-
 export default AppContainer(Company);

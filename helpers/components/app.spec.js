@@ -30,7 +30,7 @@ const setup = () => {
 
 describe('components', () => {
   describe('Companies', () => {
-    it('should render something', () => {
+    it.skip('should render something', () => {
       const { Component } = setup();
 
       expect(Component.find('h3').length).toEqual(1);
