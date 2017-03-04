@@ -15,9 +15,9 @@ const setup = () => {
   };
 
   const wrapper = render(
-    <Provider store={fakeStore}>
+    // <Provider store={fakeStore}>
       <App {...props} />
-    </Provider>
+    // </Provider>
   );
 
   const Component = wrapper.find(Companies);
@@ -30,7 +30,7 @@ const setup = () => {
 
 describe('components', () => {
   describe('Companies', () => {
-    it.skip('should render something', () => {
+    it('should render something', () => {
       const { Component } = setup();
 
       expect(Component.find('h3').length).toEqual(1);
@@ -38,7 +38,7 @@ describe('components', () => {
       expect(Component.length).toEqual(1);
     });
 
-    it.skip('should call addTodo when Add Todo button is clicked', () => {
+    it('should call addTodo when Add Todo button is clicked', () => {
       const { props, Component } = setup();
 
       let form = Component.find('form');

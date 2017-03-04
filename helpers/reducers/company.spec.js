@@ -6,7 +6,7 @@ describe('companies reducer', () => {
     expect(companies(undefined, {})).toEqual([]);
   });
 
-  it.skip('ADD_COMPANIES should replace undefined state', () => {
+  it('ADD_COMPANIES should replace undefined state', () => {
     const action = { companies: 'Amazon' };
     expect(companies(undefined, action)).toEqual([]);
   });

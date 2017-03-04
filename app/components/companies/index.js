@@ -1,6 +1,7 @@
 import React from 'react';
 import AppContainer from '../../containers/AppContainer';
 import { Link } from 'react-router';
+import { localStorageEmpty } from '../helperFunctions';
 
 const renderCompany = (props) => props.companies.map(obj => {
   return (
@@ -14,7 +15,7 @@ export class Companies extends React.Component {
   render() {
     return (
       <div className='app-body'>
-        { localStorage.length > 0 ? <h3>Select a Company</h3> : null }
+        {localStorageEmpty() ? null : <h3>Select a Company</h3>}
         {renderCompany(this.props)}
       </div>
     );

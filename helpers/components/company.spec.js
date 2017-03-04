@@ -2,7 +2,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { Companies } from '../../app/components/companies';
+import { Company } from '../../app/components/company';
 
 import configureMockStore from 'redux-mock-store';
 // const fakeStore = configureMockStore()({ companies: [], localStorage: [] });
@@ -13,7 +13,7 @@ const setup = () => {
   };
 
   const wrapper = mount(
-    <Companies companies={[{ _id: 'b', name: 'c' }]} />
+    <Company company={[{ _id: 'b', name: 'c' }]} />
   );
 
   const Component = wrapper.find(Companies);
@@ -25,7 +25,7 @@ const setup = () => {
 };
 
 describe('components', () => {
-  describe('Companies', () => {
+  describe('Company', () => {
     it('should render a h3 tag', () => {
       const { Component } = setup();
 
