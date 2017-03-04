@@ -43,10 +43,12 @@ export class Signup extends React.Component {
         })
         .catch(() => {
           this.props.setLoginErrorMessage('*An account with this email address already exists*');
+          this.refs.email.focus();
         });
     } else {
       e.preventDefault();
       this.props.setLoginErrorMessage('*Please enter a valid name, email address and password*');
+      this.refs.name.focus();
     }
   }
 
