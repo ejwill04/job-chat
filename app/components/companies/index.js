@@ -14,7 +14,7 @@ export class Companies extends React.Component {
   render() {
     return (
       <div className='app-body'>
-        <h3>Select a Company</h3>
+        { localStorage.length > 0 ? <h3>Select a Company</h3> : null }
         {renderCompany(this.props)}
       </div>
     );

@@ -13,25 +13,19 @@ export class Signup extends React.Component {
       password: '',
     };
     this.createUser = this.createUser.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(e) {
-    const { name, email, password } = this.state;
-    e.preventDefault();
-    if (email.length > 0 && password.length > 0 && this.validateEmail(email)) {
-      this.userLogin(email, password, name);
-      this.refs.email.value = '';
-      this.refs.password.value = '';
-    } else {
-      this.props.setLoginErrorMessage('*Please enter a valid email address and password*');
-      this.refs.email.focus();
+  componentWillMount() {
+    this.props.setLoginErrorMessage('');
+    if (localStorage.length > 0) {
+      browserHistory.push('/');
     }
   }
 
-  createUser() {
+  createUser(e) {
     const { name, email, password } = this.state;
     if (name.length > 0 && email.length > 0 && password.length > 0 && this.validateEmail(email)) {
+      e.preventDefault();
       fetch('http://localhost:3000/signup',
         {
           headers: {
@@ -43,31 +37,17 @@ export class Signup extends React.Component {
         }).then(response => response.json())
         .then(payload => {
           const { email, password, name, _id } = payload.user;
-          this.addNewUserToStore(email, password, name);
           localStorage.setItem('activeUserId', JSON.stringify({ email, password, name, _id }));
+          this.props.setActiveUser({ name, password, email });
+          browserHistory.push('/');
         })
-        .catch(() => this.props.setLoginErrorMessage('*An account with this email address already exists*'));
+        .catch(() => {
+          this.props.setLoginErrorMessage('*An account with this email address already exists*');
+        });
+    } else {
+      e.preventDefault();
+      this.props.setLoginErrorMessage('*Please enter a valid name, email address and password*');
     }
-    this.props.setLoginErrorMessage('*Please enter a valid name, email address and password*');
-  }
-
-  userLogin(email, password, name) {
-    fetch('http://localhost:3000/login',
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      }).then(response =>
-        this.validateUser(response));
-  }
-
-  addNewUserToStore(email, password, name) {
-    const userData = { name, password, email };
-    this.props.setActiveUser(userData);
-    browserHistory.push('/');
   }
 
   validateEmail(email) {
@@ -80,26 +60,11 @@ export class Signup extends React.Component {
     }
   }
 
-  validateUser(response) {
-    response.json().then(
-      payload => {
-        if (payload.isValid) {
-          let { name, password, email, _id } = payload.isValid;
-          this.props.setActiveUser({ name, password, email });
-          localStorage.setItem('activeUserId', JSON.stringify({ email, password, name, _id }));
-          browserHistory.push('/');
-        } else {
-          this.props.setLoginErrorMessage('*Your email and password do not match*');
-        }
-      }
-    );
-  }
-
   render() {
     return (
       <form
         className='login-form'
-        onSubmit={this.handleSubmit}
+        onSubmit={this.createUser}
         >
         <TextField
           className='input-text'
@@ -125,9 +90,8 @@ export class Signup extends React.Component {
         <div className='btn-container' >
           <RaisedButton
             className='btn btn-signup'
-            type='button'
+            type='submit'
             label='Sign Up'
-            onClick={this.createUser}
           />
           <Link to='/login'>
             <RaisedButton

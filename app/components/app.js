@@ -1,46 +1,43 @@
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
+import AutoComplete from 'material-ui/AutoComplete';
 import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import AppContainer from '../containers/AppContainer';
 import Companies from './companies';
 import { getLocalStorage, clearLocalStorage, localStorageEmpty } from './helperFunctions';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
-import AutoComplete from 'material-ui/AutoComplete';
 
 export class App extends Component {
   constructor() {
     super();
     this.state = {
       searchText: '',
+      user: '',
     };
     this.handleUpdateInput = this.handleUpdateInput.bind(this);
     this.handleSubmittedSearch = this.handleSubmittedSearch.bind(this);
   }
 
-  handleUpdateInput(searchText) {
-    this.setState({ searchText: searchText });
-  }
-
-  handleSubmittedSearch() {
-    let CompanyObj = this.props.companies.filter(company => company.name.toLowerCase() === this.state.searchText.toLowerCase());
-    if (CompanyObj) {
-      browserHistory.push(`/${CompanyObj[0].name}`);
-      this.setState({ searchText: '' });
+  componentWillReceiveProps(newProps) {
+    if (this.state.user) {
+      return;
+    } else if (localStorage.length > 0) {
+      this.setState({ user: localStorage });
+      console.log('mount it');
+      const { email, password } = getLocalStorage();
+      fetch('http://localhost:3000/companies', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': email + ':' + password,
+        },
+        method: 'GET',
+      }).then(response => response.json())
+      .then(payload => this.props.addCompanies(payload.companies));
     }
   }
-
-  componentWillMount() {
-    if (localStorageEmpty()) {
-      browserHistory.push('/login');
-    }
-  }
-
-  // componentWillReceiveProps() {
-  //
-  // }
 
   componentDidMount() {
-    console.log('it mounted')
     if (localStorage.length > 0) {
       const { email, password } = getLocalStorage();
       fetch('http://localhost:3000/companies', {
@@ -52,6 +49,22 @@ export class App extends Component {
         method: 'GET',
       }).then(response => response.json())
       .then(payload => this.props.addCompanies(payload.companies));
+    }
+  }
+
+  handleUpdateInput(searchText) {
+    this.setState({ searchText: searchText });
+  }
+
+  handleSubmittedSearch() {
+    try {
+      let CompanyObj = this.props.companies.filter(company => company.name.toLowerCase() === this.state.searchText.toLowerCase());
+      if (CompanyObj) {
+        browserHistory.push(`/${CompanyObj[0].name}`);
+        this.setState({ searchText: '' });
+      }
+    } catch (e) {
+      console.log('Not a supported company.  Try again.');
     }
   }
 
@@ -92,6 +105,17 @@ export class App extends Component {
     );
   }
 
+  toggleLoginBtn() {
+    return (
+      <RaisedButton
+        className='btn login-btn'
+        type='submit'
+        label='Login'
+        onClick={() => browserHistory.push('/login')}
+      />
+    );
+  }
+
   render() {
     const allCompanies = this.props.companies.map(obj => obj.name);
     return (
@@ -101,6 +125,7 @@ export class App extends Component {
           {localStorage.length > 0 && window.location.pathname !== '/' ? this.toggleCompaniesBtnPath() : null}
           {localStorage.length > 0 ? this.toggleSearchField(allCompanies) : null}
           {localStorage.length > 0 ? this.toggleLogoutBtn() : null}
+          {localStorage.length === 0 && window.location.pathname === '/' ? this.toggleLoginBtn() : null}
           {window.location.pathname === '/' ? <p className='tagline'>Neumann - the first employer Alan Turing said 'Fuck You' to</p> : null}
           {window.location.pathname === '/' ? <p className='directional-text'>begin by browsing or searching for companies</p> : null}
           {window.location.pathname === '/' ? <Companies /> : null}

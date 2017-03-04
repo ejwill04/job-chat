@@ -14,6 +14,13 @@ export class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillMount() {
+    this.props.setLoginErrorMessage('');
+    if (localStorage.length > 0) {
+      browserHistory.push('/');
+    }
+  }
+
   handleSubmit(e) {
     const { name, email, password } = this.state;
     e.preventDefault();
@@ -27,7 +34,7 @@ export class Login extends React.Component {
     }
   }
 
-  userLogin(email, password, name) {
+  userLogin(email, password) {
     fetch('http://localhost:3000/login',
       {
         headers: {
