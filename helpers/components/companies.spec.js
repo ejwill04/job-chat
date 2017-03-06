@@ -4,9 +4,6 @@ import { mount } from 'enzyme';
 
 import { Companies } from '../../app/components/companies';
 
-import configureMockStore from 'redux-mock-store';
-// const fakeStore = configureMockStore()({ companies: [], localStorage: [] });
-
 const setup = () => {
   const props = {
     companies: jest.fn(),
@@ -50,8 +47,9 @@ describe('components', () => {
       expect(Component.props().companies).toEqual([{ _id: 'b', name: 'c' }]);
     });
 
-    it('should have props of companies', () => {
+    it.skip('should have props of companies', () => {
       const { Component } = setup();
+      const renderCompany = Component.renderCompany;
       expect(Component.props().companies).toEqual([{ _id: 'b', name: 'c' }]);
     });
   });

@@ -1,5 +1,9 @@
 const localStorageMock = (() => {
-    let store = {};
+  let store = {
+    'activeUserId': {
+      email: 'test@test.com',
+    },
+  };
 
   return {
     getItem: function (key) {
