@@ -10,7 +10,7 @@ This project is currently an MVP.  Users can login, search for, and comment abou
 ## Installation and Setup Instructions
 
 Clone down this repository. You will need `node` and `npm` installed globally on your machine.  
-To run the server, you will need Mongo and MongoDB
+To run the server and database, you will need Mongo and MongoDB
 
 Installation:
 
@@ -22,12 +22,15 @@ To Run Test Suite:
 
 To Start Server:
 
-`nodemon index.js` from the 'node' folder  
+`nodemon index.js` from the 'node' folder 
+
+To Run MongoDB:
+
+`./mongod` from your mongoDB bin folder (ex. ./mongodb-osx-x86_64-3.4.2/bin)
 
 To Visit App:
 
-mongo: `localhost:8080`  
-mongoDB: './mongod' from your mongoDB folder (ex. ~/Desktop/mongodb-osx-x86_64-3.4.2/bin)
+`localhost:8080`  
 
 ## Reflection
 
