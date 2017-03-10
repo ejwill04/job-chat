@@ -4,14 +4,15 @@ import { Link, browserHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-export class Login extends React.Component {
+export class Signup extends React.Component {
   constructor() {
     super();
     this.state = {
       email: '',
+      name: '',
       password: '',
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.createUser = this.createUser.bind(this);
   }
 
   componentWillMount() {
@@ -21,30 +22,34 @@ export class Login extends React.Component {
     }
   }
 
-  handleSubmit(e) {
+  createUser(e) {
     const { name, email, password } = this.state;
-    e.preventDefault();
-    if (email.length > 0 && password.length > 0 && this.validateEmail(email)) {
-      this.userLogin(email, password, name);
-      this.refs.email.value = '';
-      this.refs.password.value = '';
+    if (name.length > 0 && email.length > 0 && password.length > 0 && this.validateEmail(email)) {
+      e.preventDefault();
+      fetch('http://localhost:3000/signup',
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify({ name: name, email: email, password: password }),
+        }).then(response => response.json())
+        .then(payload => {
+          const { email, password, name, _id } = payload.user;
+          localStorage.setItem('activeUserId', JSON.stringify({ email, password, name, _id }));
+          this.props.setActiveUser({ name, password, email });
+          browserHistory.push('/');
+        })
+        .catch(() => {
+          this.props.setLoginErrorMessage('*An account with this email address already exists*');
+          this.refs.email.focus();
+        });
     } else {
-      this.props.setLoginErrorMessage('*Please enter a valid email address and password*');
-      this.refs.email.focus();
+      e.preventDefault();
+      this.props.setLoginErrorMessage('*Please enter a valid name, email address and password*');
+      this.refs.name.focus();
     }
-  }
-
-  userLogin(email, password) {
-    fetch('http://localhost:3000/login',
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      }).then(response =>
-        this.validateUser(response));
   }
 
   validateEmail(email) {
@@ -57,27 +62,19 @@ export class Login extends React.Component {
     }
   }
 
-  validateUser(response) {
-    response.json().then(
-      payload => {
-        if (payload.isValid) {
-          let { name, password, email, _id } = payload.isValid;
-          this.props.setActiveUser({ name, password, email });
-          localStorage.setItem('activeUserId', JSON.stringify({ email, password, name, _id }));
-          browserHistory.push('/');
-        } else {
-          this.props.setLoginErrorMessage('*Your email and password do not match*');
-        }
-      }
-    );
-  }
-
   render() {
     return (
       <form
         className='login-form'
-        onSubmit={this.handleSubmit}
+        onSubmit={this.createUser}
         >
+        <TextField
+          className='input-text'
+          type='text'
+          ref='name'
+          floatingLabelText='Name'
+          onChange={(e) => this.setState({ name: e.target.value })}
+        />
         <TextField
           className='input-text'
           type='text'
@@ -94,15 +91,15 @@ export class Login extends React.Component {
         />
         <div className='btn-container' >
           <RaisedButton
-            className='btn btn-login'
+            className='btn btn-signup'
             type='submit'
-            label='Login'
+            label='Sign Up'
           />
-          <Link to='/signup'>
+          <Link to='/login'>
             <RaisedButton
-              className='btn'
+              className='btn btn-login'
               type='submit'
-              label='Signup for an account'
+              label='Have an account? Signin'
             />
           </Link>
         </div>
@@ -112,7 +109,7 @@ export class Login extends React.Component {
   };
 };
 
-Login.propTypes = {
+Signup.propTypes = {
   companies: React.PropTypes.array,
   errorMessage: React.PropTypes.string,
   setLoginErrorMessage: React.PropTypes.func,
@@ -120,4 +117,4 @@ Login.propTypes = {
   deleteComment: React.PropTypes.func,
 };
 
-export default AppContainer(Login);
+export default AppContainer(Signup);

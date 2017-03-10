@@ -20,6 +20,11 @@ export class Company extends React.Component {
     this.handleSubmitComment = this.handleSubmitComment.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    const companyObj = this.props.companies.filter(obj => obj.name === newProps.params.name)[0] || [];
+    this.setState({ thisCompany: companyObj });
+  }
+
   componentWillMount() {
     this.fetchAllUsers();
     this.fetchCompanies();
@@ -40,7 +45,7 @@ export class Company extends React.Component {
     .then(response => response.json()).then((data) => {
       this.props.addComment(data);
       this.setState({ thisCompany: data.company });
-      this.fetchCompanies();
+      // this.fetchCompanies();
       this.clearCommentInput();
     })
     .catch((err) => console.log('props', this.props, 'error', err));
@@ -63,8 +68,7 @@ export class Company extends React.Component {
       }).then(response => response.json())
       .then(payload => this.props.addCompanies(payload.companies))
       .then(() => {
-        const company = this.props.companies.find(co => co.name === this.props.params.name) || [];
-        this.setState({ thisCompany: company });
+        this.setState({ thisCompany: this.props.companies.find(co => co.name === this.props.params.name) });
       });
     }
   }
@@ -130,8 +134,7 @@ export class Company extends React.Component {
 
   render() {
     const company = this.state.thisCompany;
-    const comments = company.comments
-    ? company.comments.map(commentObj =>
+    const comments = company.comments ? company.comments.map(commentObj =>
       <div key={commentObj._id} className='comment-box'>
         {this.renderUser(commentObj.user)}
         <span className='comment-submit-date'>{moment(commentObj.createdAt).format('MMMM do, h:mma')}</span>
@@ -176,5 +179,4 @@ Company.propTypes = {
   addCompanies: React.PropTypes.func,
   deleteComment: React.PropTypes.func,
 };
-
 export default AppContainer(Company);

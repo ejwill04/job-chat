@@ -2,12 +2,13 @@
 import React from 'react';
 import { mount, render } from 'enzyme';
 
-import AppContainer from '../../app/containers/AppContainer';
 import App from '../../app/components/app';
-import { Provider } from 'react-redux';
+// import { Provider } from 'react-redux';
+// import { createStore } from 'redux';
+// import rootReducer from '../../app/reducers';
+// const devTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 
-import configureMockStore from 'redux-mock-store';
-const fakeStore = configureMockStore()({ companies: [] });
+// const store = createStore(rootReducer, devTools);
 
 const setup = () => {
   const props = {
@@ -15,12 +16,10 @@ const setup = () => {
   };
 
   const wrapper = render(
-    <Provider store={fakeStore}>
-      <App {...props} />
-    </Provider>
+    <App {...props} />
   );
 
-  const Component = wrapper.find(Companies);
+  const Component = wrapper.find(App);
 
   return {
     props,
@@ -29,12 +28,12 @@ const setup = () => {
 };
 
 describe('components', () => {
-  describe('Companies', () => {
-    it('should render something', () => {
+  describe('App', () => {
+    it.skip('should render something', () => {
       const { Component } = setup();
 
-      expect(Component.find('h3').length).toEqual(1);
-
+      expect(Component.find('toggleLogoutBtn').length).toEqual(1);
+      // console.log(Component.find('props'))
       expect(Component.length).toEqual(1);
     });
 
@@ -51,37 +50,4 @@ describe('components', () => {
       expect(props.handleSubmit.mock.calls.length).toBe(1);
     });
   });
-});
-
-describe('test with mock localStorage', () => {
-  const localStoarge = [{ thing: 'thing2' }];
-  afterEach(() => {
-    localStorage.clear();
-// remove callback
-    localStorage.itemInsertionCallback = null;
-  });
-    it.skip('emulate quota exceeded error', () => {
-      localStorage.length.should.equal(0);
-// register callback
-      localStorage.itemInsertionCallback = (len) => {
-        if (len >= 5) {
-          let err = new Error('Mock localStorage quota exceeded');
-          err.code = 22;
-          throw err;
-        }
-      };
-      let handled = false;
-      try {
-        for (let i = 0; i < 10; ++i) {
-          localStorage.setItem(i, i);
-        }
-      } catch (e) {
-        if (e.code === 22) {
-                // handle quota exceeded error
-          handled = true;
-        }
-      }
-      handled.should.be.true;
-      localStorage.length.should.equal(5);
-    });
 });
