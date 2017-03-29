@@ -5,7 +5,7 @@ An app for finding information about potential employers
 ## Project Status
 This project is currently an MVP.  Users can login, search for, and comment about potential companies.
 
-![Screenshot](http://imgur.com/TWcqNbK)
+![Screenshot](http://i.imgur.com/TWcqNbK.png)
 
 ## Installation and Setup Instructions
 
